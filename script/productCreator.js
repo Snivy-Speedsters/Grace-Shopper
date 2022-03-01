@@ -1,6 +1,6 @@
 const { faker } = require('@faker-js/faker')
 
-function createProduct(){
+async function createProduct(){
 
     const name = faker.name.findName()
     const price = faker.commerce.price(1000, 5000)
