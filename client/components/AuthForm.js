@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { authenticate } from "../store";
+import { login } from "../store";
 
 /**
  * COMPONENT
@@ -13,7 +13,7 @@ const AuthForm = (props) => {
       <form onSubmit={handleSubmit} name={name}>
         <div>
           <label htmlFor="username">
-            <small>Username</small>
+            <small>email</small>
           </label>
           <input name="username" type="text" />
         </div>
@@ -54,7 +54,7 @@ const mapDispatch = (dispatch) => {
       const formName = evt.target.name;
       const username = evt.target.username.value;
       const password = evt.target.password.value;
-      dispatch(authenticate(username, password, formName));
+      dispatch(login(username, password, formName));
     },
   };
 };
