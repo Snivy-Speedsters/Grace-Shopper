@@ -2,18 +2,41 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
-const axios = require('axios');
 
 const SALT_ROUNDS = 5;
 
 const User = db.define('user', {
-  username: {
+  firstName: {
     type: Sequelize.STRING,
-    unique: true,
+    allowNull: false
+  },
+  lastName: {
+    type: Sequelize.STRING,
     allowNull: false
   },
   password: {
     type: Sequelize.STRING,
+  },
+  email: {
+    type: Sequelize.STRING,
+    unique: true,
+    allowNull: false,
+    validate: {
+      isEmail: true
+    }
+  },
+  shippingAddress: {
+    type: Sequelize.TEXT
+  },
+  cart: {
+    type: Sequelize.ARRAY(Sequelize.TEXT)
+  },
+  pastOrders: {
+    type: Sequelize.ARRAY(Sequelize.TEXT)
+  },
+  administrator: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 })
 
