@@ -10,12 +10,25 @@ const AuthForm = (props) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} name={name}>
+      <form onSubmit={handleSubmit} name={"signup"}>
+        <h1>welcome please fill out the information below</h1>
         <div>
-          <label htmlFor="username">
-            <small>Username</small>
+          <label htmlFor="firstName">
+            <small>first Name</small>
           </label>
-          <input name="username" type="text" />
+          <input name="firstName" type="text" />
+        </div>
+        <div>
+          <label htmlFor="lastName">
+            <small>last Name</small>
+          </label>
+          <input name="lastName" type="text" />
+        </div>
+        <div>
+          <label htmlFor="email">
+            <small>email</small>
+          </label>
+          <input name="email" type="text" />
         </div>
         <div>
           <label htmlFor="password">
@@ -24,7 +37,7 @@ const AuthForm = (props) => {
           <input name="password" type="password" />
         </div>
         <div>
-          <button type="submit">{displayName}</button>
+          <button type="submit">Sign up</button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
@@ -39,10 +52,9 @@ const AuthForm = (props) => {
  *   function, and share the same Component. This is a good example of how we
  *   can stay DRY with interfaces that are very similar to each other!
  */
-const mapLogin = (state) => {
+
+const mapSignup = (state) => {
   return {
-    name: "login",
-    displayName: "Login",
     error: state.auth.error,
   };
 };
@@ -52,11 +64,13 @@ const mapDispatch = (dispatch) => {
     handleSubmit(evt) {
       evt.preventDefault();
       const formName = evt.target.name;
-      const username = evt.target.username.value;
+      const firstName = evt.target.firstName.value;
+      const lastName = evt.target.lastName.value;
+      const email = evt.target.email.value;
       const password = evt.target.password.value;
-      dispatch(authenticate(username, password, formName));
+      dispatch(authenticate(firstName, lastName, email, password, formName));
     },
   };
 };
 
-export const Login = connect(mapLogin, mapDispatch)(AuthForm);
+export const Signup = connect(mapSignup, mapDispatch)(AuthForm);
