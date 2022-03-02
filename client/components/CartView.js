@@ -1,13 +1,17 @@
 import React, { Component, useState } from "react";
 import { connect } from "react-redux";
-import { fetchCartProducts, updateCartProduct } from "../store/cart";
+import {
+  fetchCartProducts,
+  updateCartProduct,
+  fetchCheckout,
+} from "../store/cart";
 
 class Cart extends Component {
   componentDidMount() {
     try {
       this.props.getCartProducts(this.props.userId);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
   render() {
@@ -29,7 +33,18 @@ class Cart extends Component {
                 <b>Quantity: {product.quantity}</b>
               </p>
 
-              <button className="remove-button" onClick={() => {this.props.updateCartProduct(this.props.userId, product.id, 'remove')}}>Remove Item</button>
+              <button
+                className="remove-button"
+                onClick={() => {
+                  this.props.updateCartProduct(
+                    this.props.userId,
+                    product.id,
+                    "remove"
+                  );
+                }}
+              >
+                Remove Item
+              </button>
             </div>
           </li>
         );
@@ -42,6 +57,14 @@ class Cart extends Component {
         <div className="cart">
           <h5>You have ordered:</h5>
           <ul className="collection">{addedProducts}</ul>
+          <button
+            className="checkout-button"
+            onClick={() => {
+              this.props.checkout(this.props.userId, this.props.cartProducts);
+            }}
+          >
+            Checkout
+          </button>
         </div>
       </div>
     );
@@ -54,8 +77,11 @@ const mapState = (state) => ({
 });
 
 const mapDispatch = (dispatch) => ({
-    getCartProducts: (userId) => dispatch(fetchCartProducts(userId)),
-    updateCartProduct: (userId, productId, action) => dispatch(updateCartProduct(userId, productId, action)),
+  getCartProducts: (userId) => dispatch(fetchCartProducts(userId)),
+  updateCartProduct: (userId, productId, action) =>
+    dispatch(updateCartProduct(userId, productId, action)),
+  checkout: (userId, cartProducts) =>
+    dispatch(fetchCheckout(userId, cartProducts)),
 });
 
 export default connect(mapState, mapDispatch)(Cart);
