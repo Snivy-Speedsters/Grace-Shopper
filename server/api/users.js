@@ -21,6 +21,7 @@ router.get('/:userId', async (req, res, next) => {
     const userId = req.params.userId
 
     const user = await User.findByPk(userId,
+      {include: {model: Product, attributes: ['id','name', 'price', 'imageUrl'], through: {attributes: []}}},
       {attributes: ['firstName', 'lastName', 'email']})
     res.send(user)
   } catch (err) {
@@ -46,23 +47,24 @@ router.put('/:userId/cart/:productId', async (req, res, next) => {
     const userId = req.params.userId
     const productId = req.params.productId
     const action = req.body.action
-    const actionVerb = action === 'add' ? 'Added' : 'Removed'
 
-    const user = await User.findByPk(userId)
-    const product = await Product.findByPk(productId)
+    const user = await User.findByPk(userId, {include: {model: Product}})
+    const product = await Product.findByPk(productId, {attributes: ['id','name', 'price', 'imageUrl']})
 
     switch(action){
       case 'add':
-        user.addProduct(product)
+        await user.addProduct(product)
+        user.products = [...user.products, product]
         break
       case 'remove':
-        user.removeProduct(product)
+        await user.removeProduct(product)
+        user.products = user.products.filter(i => i.id != product.id)
         break
       default:
         break
     }
 
-    res.send(`${actionVerb} ${product.name}`)
+    res.send(user.products)
 
   } catch (err) {
     next(err)

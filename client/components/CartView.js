@@ -1,12 +1,14 @@
 import React, { Component, useState } from "react";
 import { connect } from "react-redux";
-import { fetchCartProducts } from "../store/products";
+import { fetchCartProducts, updateCartProduct } from "../store/cart";
 
 class Cart extends Component {
   componentDidMount() {
     try {
       this.props.getCartProducts(this.props.userId);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
   render() {
     let addedProducts = this.props.cartProducts.length ? (
@@ -27,7 +29,7 @@ class Cart extends Component {
                 <b>Quantity: {product.quantity}</b>
               </p>
 
-              <button className="remove-button">Remove Item</button>
+              <button className="remove-button" onClick={() => {this.props.updateCartProduct(this.props.userId, product.id, 'remove')}}>Remove Item</button>
             </div>
           </li>
         );
@@ -52,8 +54,8 @@ const mapState = (state) => ({
 });
 
 const mapDispatch = (dispatch) => ({
-  getCartProducts: (id) => dispatch(fetchCartProducts(id)),
-  // deleteCartProduct: (id) => dispatch(removeCartProduct(id)),
+    getCartProducts: (userId) => dispatch(fetchCartProducts(userId)),
+    updateCartProduct: (userId, productId, action) => dispatch(updateCartProduct(userId, productId, action)),
 });
 
 export default connect(mapState, mapDispatch)(Cart);
