@@ -3,12 +3,11 @@
 const {db, models: {User, Product} } = require('../server/db')
 const createUser = require('./userCreator')
 const createProduct = require('./productCreator')
-const grabImage = require('./grabImage')
-
 
 // Change number to the desired amount of users and products to be generated
 const userAmount = 20
 const productAmount = 20
+const productSKUs = []
 
 /**
  * seed - this function clears the database, updates tables to
@@ -16,21 +15,26 @@ const productAmount = 20
  */
 async function seed() {
   await db.sync({ force: true }) // clears db and matches models to tables
-  console.log('db synced!\nSeeding tables and grabbing images...')
+  console.log('db synced!')
 
   for(let i = 0; i < userAmount; i++){
     await User.create(createUser())
   }
 
   for(let i = 0; i < productAmount; i++){
-    await Product.create(createProduct())
+    const product = await Product.create(createProduct(i + 1))
+
+    if((Math.floor(Math.random() * 10)) * 10 < 4){
+      productSKUs.push(product.sku)
+    } else if(i === 0){
+      productSKUs.push(product.sku)
+    }
   }
 
-  const productImages = await grabImage(productAmount)
-
-  for(let i = 0; i < productImages.length; i++){
-    const product = await Product.findByPk(i + 1)
-    await product.update({imageUrl: productImages[i]})
+  for(let i = 0; i < productSKUs.length; i++){
+    const user = await User.findByPk(((Math.floor(Math.random() * productAmount) + 1)))
+    const newCart = user.cart ? [...user.cart, productSKUs[i]] : [productSKUs[i]]
+    await user.update({cart: newCart})
   }
 
   console.log(`seeded successfully`)
@@ -45,7 +49,6 @@ async function runSeed() {
   console.log('seeding...')
   try {
     await seed()
-    // await grabImage(productAmount)
   } catch (err) {
     console.error(err)
     process.exitCode = 1
