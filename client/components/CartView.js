@@ -5,8 +5,17 @@ import {
   updateCartProduct,
   fetchCheckout,
 } from "../store/cart";
+import { me } from "../store/auth";
 
 class Cart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      numOfOrders: this.props.pastOrders.length,
+    };
+
+    this.handleCheckout = this.handleCheckout.bind(this);
+  }
   componentDidMount() {
     try {
       this.props.getCartProducts(this.props.userId);
@@ -14,6 +23,15 @@ class Cart extends Component {
       console.log(error);
     }
   }
+
+  async handleCheckout(user, cart) {
+    await this.props.checkout(user, cart);
+    await this.props.auth();
+    this.setState({
+      numOfOrders: this.props.pastOrders.length,
+    });
+  }
+
   render() {
     let addedProducts = this.props.cartProducts.length ? (
       this.props.cartProducts.map((product) => {
@@ -60,11 +78,14 @@ class Cart extends Component {
           <button
             className="checkout-button"
             onClick={() => {
-              this.props.checkout(this.props.userId, this.props.cartProducts);
+              this.handleCheckout(this.props.userId, this.props.cartProducts);
             }}
           >
             Checkout
           </button>
+          <div>
+            <button>'view previous orders: {this.state.numOfOrders}</button>
+          </div>
         </div>
       </div>
     );
@@ -74,6 +95,7 @@ class Cart extends Component {
 const mapState = (state) => ({
   cartProducts: state.cart,
   userId: state.auth.id,
+  pastOrders: state.auth.pastOrders,
 });
 
 const mapDispatch = (dispatch) => ({
@@ -82,6 +104,7 @@ const mapDispatch = (dispatch) => ({
     dispatch(updateCartProduct(userId, productId, action)),
   checkout: (userId, cartProducts) =>
     dispatch(fetchCheckout(userId, cartProducts)),
+  auth: () => dispatch(me()),
 });
 
 export default connect(mapState, mapDispatch)(Cart);
