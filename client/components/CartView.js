@@ -1,15 +1,37 @@
 import React, { Component, useState } from "react";
 import { connect } from "react-redux";
-import { fetchCartProducts, updateCartProduct } from "../store/cart";
+import {
+  fetchCartProducts,
+  updateCartProduct,
+  fetchCheckout,
+} from "../store/cart";
+import { me } from "../store/auth";
 
 class Cart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      numOfOrders: this.props.pastOrders.length,
+    };
+
+    this.handleCheckout = this.handleCheckout.bind(this);
+  }
   componentDidMount() {
     try {
       this.props.getCartProducts(this.props.userId);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
+
+  async handleCheckout(user, cart) {
+    await this.props.checkout(user, cart);
+    await this.props.auth();
+    this.setState({
+      numOfOrders: this.props.pastOrders.length,
+    });
+  }
+
   render() {
     let addedProducts = this.props.cartProducts.length ? (
       this.props.cartProducts.map((product) => {
@@ -29,7 +51,18 @@ class Cart extends Component {
                 <b>Quantity: {product.quantity}</b>
               </p>
 
-              <button className="remove-button" onClick={() => {this.props.updateCartProduct(this.props.userId, product.id, 'remove')}}>Remove Item</button>
+              <button
+                className="remove-button"
+                onClick={() => {
+                  this.props.updateCartProduct(
+                    this.props.userId,
+                    product.id,
+                    "remove"
+                  );
+                }}
+              >
+                Remove Item
+              </button>
             </div>
           </li>
         );
@@ -42,6 +75,17 @@ class Cart extends Component {
         <div className="cart">
           <h5>You have ordered:</h5>
           <ul className="collection">{addedProducts}</ul>
+          <button
+            className="checkout-button"
+            onClick={() => {
+              this.handleCheckout(this.props.userId, this.props.cartProducts);
+            }}
+          >
+            Checkout
+          </button>
+          <div>
+            <button>'view previous orders: {this.state.numOfOrders}</button>
+          </div>
         </div>
       </div>
     );
@@ -51,11 +95,16 @@ class Cart extends Component {
 const mapState = (state) => ({
   cartProducts: state.cart,
   userId: state.auth.id,
+  pastOrders: state.auth.pastOrders,
 });
 
 const mapDispatch = (dispatch) => ({
-    getCartProducts: (userId) => dispatch(fetchCartProducts(userId)),
-    updateCartProduct: (userId, productId, action) => dispatch(updateCartProduct(userId, productId, action)),
+  getCartProducts: (userId) => dispatch(fetchCartProducts(userId)),
+  updateCartProduct: (userId, productId, action) =>
+    dispatch(updateCartProduct(userId, productId, action)),
+  checkout: (userId, cartProducts) =>
+    dispatch(fetchCheckout(userId, cartProducts)),
+  auth: () => dispatch(me()),
 });
 
 export default connect(mapState, mapDispatch)(Cart);
