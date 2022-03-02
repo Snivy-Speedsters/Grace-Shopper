@@ -7,6 +7,7 @@ const createProduct = require('./productCreator')
 // Change number to the desired amount of users and products to be generated
 const userAmount = 20
 const productAmount = 20
+const productSKUs = []
 
 /**
  * seed - this function clears the database, updates tables to
@@ -21,7 +22,19 @@ async function seed() {
   }
 
   for(let i = 0; i < productAmount; i++){
-    await Product.create(createProduct(i + 1))
+    const product = await Product.create(createProduct(i + 1))
+
+    if((Math.floor(Math.random() * 10)) * 10 < 4){
+      productSKUs.push(product.sku)
+    } else if(i === 0){
+      productSKUs.push(product.sku)
+    }
+  }
+
+  for(let i = 0; i < productSKUs.length; i++){
+    const user = await User.findByPk(((Math.floor(Math.random() * productAmount) + 1)))
+    const newCart = user.cart ? [...user.cart, productSKUs[i]] : [productSKUs[i]]
+    await user.update({cart: newCart})
   }
 
   console.log(`seeded successfully`)
