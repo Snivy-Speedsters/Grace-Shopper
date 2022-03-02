@@ -11,6 +11,8 @@ class Cart extends Component {
 		}
 	}
 	render() {
+		let qty = [0, 1, 2, 3, 4, 5, 6, 7];
+
 		let addedProducts = this.props.cartProducts.length ? (
 			this.props.cartProducts.map((product) => {
 				return (
@@ -25,22 +27,30 @@ class Cart extends Component {
 							<p>
 								<b>Price: {product.price}$</b>
 							</p>
-							<p>
-								<b>Quantity: {product.quantity}</b>
-							</p>
+							<b>
+								Days:
+								<select>
+									<option>{'Chosen Qty'}</option>
+									{qty.map((q) => {
+										if (q != 0) return <option key={q}>{q}</option>;
+									})}
+								</select>
+							</b>
 
-							<button
-								className="remove-button"
-								onClick={() => {
-									this.props.updateCartProduct(
-										this.props.userId,
-										product.id,
-										'remove'
-									);
-								}}
-							>
-								Remove Item
-							</button>
+							<div>
+								<button
+									className="remove-button"
+									onClick={() => {
+										this.props.updateCartProduct(
+											this.props.userId,
+											product.id,
+											'remove'
+										);
+									}}
+								>
+									Remove Buddy
+								</button>
+							</div>
 						</div>
 					</li>
 				);
