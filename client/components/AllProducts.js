@@ -16,7 +16,7 @@ class AllProducts extends Component {
 		let products = this.props.products || [];
 		return (
 			<div>
-				<h1>All Products</h1>
+				<h1>All Buddies</h1>
 				<ul>
 					{products.map((product) => {
 						return (

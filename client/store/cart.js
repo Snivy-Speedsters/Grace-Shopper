@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 let initialState = [];
 
@@ -6,43 +6,52 @@ let initialState = [];
  Action Type
  */
 
-const SET_PRODUCTS = "SET_PRODUCTS";
+const SET_PRODUCTS = 'SET_PRODUCTS';
+const UPDATE_CART = 'UPDATE_CART';
 
 /*
  Action Creator
  */
 const setProducts = (product) => ({
-  type: SET_PRODUCTS,
-  product,
+	type: SET_PRODUCTS,
+	product,
 });
+
+const updateCart = (product) => {
+	return {
+		type: UPDATE_CART,
+		product,
+	};
+};
 
 /*
  Thunks
  */
 
 export const fetchCartProducts = (userId) => {
-  return async (dispatch) => {
-    try {
-      const { data } = await axios.get(`/api/users/${userId}/cart`);
-      dispatch(setProducts(data));
-    } catch (error) {
-      console.log("fetchCart Error", error);
-    }
-  };
+	return async (dispatch) => {
+		try {
+			const { data } = await axios.get(`/api/users/${userId}/cart`);
+			dispatch(setProducts(data));
+		} catch (error) {
+			console.log('fetchCart Error', error);
+		}
+	};
 };
 
 export const updateCartProduct = (userId, productId, action) => {
-  return async (dispatch) => {
-    try {
-      const { data } = await axios.put(
-        `/api/users/${userId}/cart/${productId}`,
-        { action }
-      );
-      dispatch(setProducts(data));
-    } catch (error) {
-      console.log("fetchCart Error", error);
-    }
-  };
+	return async (dispatch) => {
+		try {
+			const { data } = await axios.put(
+				`/api/users/${userId}/cart/${productId}`,
+				{ action }
+			);
+			dispatch(updateCart(data));
+		} catch (error) {
+			console.log('updateCart Error', error);
+		}
+	};
+
 };
 export const fetchCheckout = (userId, products) => {
   return async (dispatch) => {
@@ -62,10 +71,14 @@ export const fetchCheckout = (userId, products) => {
  */
 
 export default function cartReducer(state = initialState, action) {
-  switch (action.type) {
-    case SET_PRODUCTS:
-      return action.product;
-    default:
-      return state;
-  }
+	switch (action.type) {
+		case SET_PRODUCTS:
+			return action.product;
+		case UPDATE_CART:
+			return state.map((product) => {
+				return product.id === action.product.id ? action.product : product;
+			});
+		default:
+			return state;
+	}
 }
