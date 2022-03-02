@@ -20,10 +20,10 @@ const setProducts = (product) => ({
  Thunks
  */
 
-export const fetchCartProducts = (id) => {
+export const fetchCartProducts = (userId) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`/api/cart/${id}`);
+      const { data } = await axios.get(`/api/user/${userId}/cart`);
       dispatch(setProducts(data));
     } catch (error) {
       console.log("fetchCart Error", error);
@@ -35,7 +35,7 @@ export const fetchCartProducts = (id) => {
  Reducer
  */
 
-export default function (state = initialState, action) {
+export default function cartReducer(state = initialState, action) {
   switch (action.type) {
     case SET_PRODUCTS:
       return action.product;
