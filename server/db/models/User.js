@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const db = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const product = require("./Product");
 
 const SALT_ROUNDS = 5;
 
@@ -27,9 +28,6 @@ const User = db.define("user", {
   },
   shippingAddress: {
     type: Sequelize.TEXT,
-  },
-  cart: {
-    type: Sequelize.ARRAY(Sequelize.TEXT),
   },
   pastOrders: {
     type: Sequelize.ARRAY(Sequelize.TEXT),
@@ -58,7 +56,9 @@ User.prototype.generateToken = function () {
  * classMethods
  */
 User.authenticate = async function ({ email, password }) {
-  const user = await this.findOne({ where: { email } });
+  const user = await this.findOne({
+    where: { email },
+  });
   if (!user || !(await user.correctPassword(password))) {
     const error = Error("Incorrect username/password");
     error.status = 401;
