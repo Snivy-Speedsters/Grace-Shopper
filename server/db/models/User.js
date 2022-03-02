@@ -28,9 +28,6 @@ const User = db.define("user", {
   shippingAddress: {
     type: Sequelize.TEXT,
   },
-  cart: {
-    type: Sequelize.ARRAY(Sequelize.TEXT),
-  },
   pastOrders: {
     type: Sequelize.ARRAY(Sequelize.TEXT),
   },
