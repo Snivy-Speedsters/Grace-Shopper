@@ -23,7 +23,18 @@ const setProducts = (product) => ({
 export const fetchCartProducts = (userId) => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.get(`/api/user/${userId}/cart`);
+      const { data } = await axios.get(`/api/users/${userId}/cart`);
+      dispatch(setProducts(data));
+    } catch (error) {
+      console.log("fetchCart Error", error);
+    }
+  };
+};
+
+export const updateCartProduct = (userId, productId, action) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(`/api/users/${userId}/cart/${productId}`, {action});
       dispatch(setProducts(data));
     } catch (error) {
       console.log("fetchCart Error", error);

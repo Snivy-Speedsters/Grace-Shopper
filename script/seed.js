@@ -36,7 +36,8 @@ async function seed() {
     await user.addProduct(productIds[i + 1])
   }
 
-  await User.create({firstName: 'John', lastName: 'Doe', email: 'test@email.com', password: '123', address: '123 Road Lane'})
+  const testUser = await User.create({firstName: 'John', lastName: 'Doe', email: 'test@email.com', password: '123', address: '123 Road Lane'})
+  await testUser.addProducts([1, 2, 3])
 
   await User.create({firstName: 'Jane', lastName: 'Doe', email: 'testAdmin@email.com', password: '123', address: '456 Lane Road', administrator: true})
 
