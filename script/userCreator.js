@@ -5,7 +5,8 @@ function createUser(){
     const firstName = faker.name.firstName()
     const lastName = faker.name.lastName()
     const email = faker.internet.email(firstName, lastName)
-    const password = faker.internet.password(10)
+    // const password = faker.internet.password(10)
+    const password = '123'
     const shippingAddress = faker.address.streetName()
 
 
