@@ -51,6 +51,19 @@ export const updateCartProduct = (userId, productId, action) => {
 			console.log('updateCart Error', error);
 		}
 	};
+
+};
+export const fetchCheckout = (userId, products) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.put(`/api/users/${userId}/cart`, {
+        action: "checkout",
+      });
+      dispatch(setProducts(data));
+    } catch (error) {
+      console.log("checkout Error", error);
+    }
+  };
 };
 
 /*

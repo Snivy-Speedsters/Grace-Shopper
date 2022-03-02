@@ -30,7 +30,8 @@ const User = db.define("user", {
     type: Sequelize.TEXT,
   },
   pastOrders: {
-    type: Sequelize.ARRAY(Sequelize.TEXT),
+    type: Sequelize.ARRAY(Sequelize.JSONB),
+    defaultValue: [],
   },
   administrator: {
     type: Sequelize.BOOLEAN,
