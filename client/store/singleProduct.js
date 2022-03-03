@@ -24,6 +24,12 @@ export const deleteSingleProduct = (id) => async (dispatch) => {
 	dispatch(setSingleProduct(data));
 };
 
+export const createSingleProduct = (id, product) => async (dispatch) => {
+	const token = window.localStorage.getItem('token')
+	const { data } = await axios.post(`/api/admin/products/`, { product, headers: { 'authorization': token }});
+	dispatch(setSingleProduct(data));
+};
+
 export default function productReducer(state = {}, action) {
 	switch (action.type) {
 		case SET_SINGLE_PRODUCT:

@@ -1,6 +1,8 @@
-import React, { Component, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { Component, useState } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import {
+
 	fetchCartProducts,
 	removeCartProduct,
 	fetchCheckout,
@@ -44,6 +46,7 @@ class Cart extends Component {
 	}
 
 	async handleCheckout() {
+        alert("Proceed with checkout");
 		await this.props.checkout();
 	}
 
@@ -111,16 +114,18 @@ class Cart extends Component {
 						Checkout
 					</button>
 					<div>
-						<button>View previous orders: {this.state.numOfOrders}</button>
-					</div>
+ <Link to={"/orderHistory"}>
+              <button>View previous orders</button>
+            </Link>					</div>
 				</div>
 			</div>
 		);
 	}
+
 }
 
 const mapState = (state) => ({
-	cartProducts: state.cart,
+  cartProducts: state.cart,
 });
 
 const mapDispatch = (dispatch) => ({
@@ -129,6 +134,7 @@ const mapDispatch = (dispatch) => ({
 	updateCartProducts: (qty, productId) =>
 		dispatch(updateCartProducts(qty, productId)),
 	checkout: () => dispatch(fetchCheckout()),
+
 });
 
 export default connect(mapState, mapDispatch)(Cart);
