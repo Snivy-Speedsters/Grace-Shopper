@@ -13,7 +13,6 @@ const Navbar = ({ handleClick, isLoggedIn, isAdmin }) => (
 					<Link to="/home">Home</Link>
 					<Link to="/products">All Buddies</Link>
 					<Link to="/cart">View Cart</Link>
-					{console.log(isAdmin)}
 					{isAdmin ? <Link to="/admin">Admin</Link> : <></>}
 
 					<a href="#" onClick={handleClick}>

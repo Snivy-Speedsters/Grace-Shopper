@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { fetchProducts } from '../../store/products'
 import {connect} from 'react-redux'
 import ProductCard from './ProductCard'
+import { Link } from 'react-router-dom'
 
 
 export const AllProducts = props => {
@@ -24,6 +25,9 @@ export const AllProducts = props => {
 
   return (
     <div>
+      <Link to='/admin/products/add'>
+        <button>Add Products</button>
+      </Link>
       {
       products.length === 0 ?
       <h3>No Products</h3> :
