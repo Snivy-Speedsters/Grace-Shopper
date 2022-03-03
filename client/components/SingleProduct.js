@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchSingleProduct } from '../store/singleProduct';
-import { updateCartProduct } from '../store/cart';
+import { addCartProduct } from '../store/cart';
 import { Link } from 'react-router-dom';
 
 class SingleProduct extends React.Component {
@@ -24,11 +24,7 @@ class SingleProduct extends React.Component {
 					<button
 						className="add-button"
 						onClick={() => {
-							this.props.updateCartProduct(
-								this.props.userId,
-								product.id,
-								'add'
-							);
+							this.props.addCartProduct(product.id);
 						}}
 					>
 						Add Buddy
@@ -59,8 +55,7 @@ const mapState = (state) => ({
 
 const mapDispatch = (dispatch) => ({
 	getSingleProduct: (id) => dispatch(fetchSingleProduct(id)),
-	updateCartProduct: (userId, productId, action) =>
-		dispatch(updateCartProduct(userId, productId, action)),
+	addCartProduct: (productId) => dispatch(addCartProduct(productId)),
 });
 
 export default connect(mapState, mapDispatch)(SingleProduct);

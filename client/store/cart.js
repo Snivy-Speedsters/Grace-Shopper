@@ -28,10 +28,11 @@ const updateCart = (product) => {
  Thunks
  */
 
-export const fetchCartProducts = (userId) => {
+export const fetchCartProducts = () => {
 	return async (dispatch) => {
 		try {
-			const { data } = await axios.get(`/api/users/${userId}/cart`);
+			const token = window.localStorage.getItem('token')
+			const { data } = await axios.get(`/api/users/cart`, {headers: { 'authorization': token }})
 			dispatch(setProducts(data));
 		} catch (error) {
 			console.log('fetchCart Error', error);
@@ -39,26 +40,35 @@ export const fetchCartProducts = (userId) => {
 	};
 };
 
-export const updateCartProduct = (userId, productId, action) => {
+export const addCartProduct = (productId) => {
 	return async (dispatch) => {
 		try {
-			const { data } = await axios.put(
-				`/api/users/${userId}/cart/${productId}`,
-				{ action }
-			);
-			dispatch(updateCart(data));
+			const token = window.localStorage.getItem('token')
+			const { data } = await axios.put(`/api/users/cart/add/${productId}`, {headers: { 'authorization': token }})
+			dispatch(updateCart(data))
 		} catch (error) {
-			console.log('updateCart Error', error);
+			console.log('addCart Error', error);
 		}
-	};
+	}
+}
 
-};
-export const fetchCheckout = (userId, products) => {
+export const removeCartProduct = (productId) => {
+	return async (dispatch) => {
+		try {
+			const token = window.localStorage.getItem('token')
+			const { data } = await axios.put(`/api/users/cart/remove/${productId}`, {headers: { 'authorization': token }})
+			dispatch(updateCart(data))
+		} catch (error) {
+			console.log('removeCart Error', error)
+		}
+	}
+}
+
+export const fetchCheckout = () => {
   return async (dispatch) => {
     try {
-      const { data } = await axios.put(`/api/users/${userId}/cart`, {
-        action: "checkout",
-      });
+			const token = window.localStorage.getItem('token')
+      const { data } = await axios.put(`/api/users/cart/checkout`, {headers: { 'authorization': token }});
       dispatch(setProducts(data));
     } catch (error) {
       console.log("checkout Error", error);

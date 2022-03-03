@@ -4,82 +4,41 @@ const {
 } = require("../db");
 module.exports = router;
 
-router.get("/", async (req, res, next) => {
+const requireToken = async (req, res, next) => {
   try {
-    const users = await User.findAll({
-      // explicitly select only the id and username fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-      attributes: ["id", "email"],
-    });
-    res.json(users);
+    const token = req.headers.authorization ? req.headers.authorization : req.body.headers.authorization
+    const user = await User.findByToken(token);
+    req.user = user;
+    next();
+  } catch(error) {
+    next(error);
+  }
+};
+
+router.get("/", requireToken, async (req, res, next) => {
+  try {
+    res.send(req.user);
   } catch (err) {
     next(err);
   }
 });
 
-router.get("/:userId", async (req, res, next) => {
+router.get("/cart", requireToken, async (req, res, next) => {
   try {
-    const userId = req.params.userId;
-
-    const user = await User.findByPk(
-      userId,
-      {
-        include: {
-          model: Product,
-          attributes: ["id", "name", "price", "imageUrl"],
-          through: { attributes: [] },
-        },
-      },
-      { attributes: ["firstName", "lastName", "email"] }
-    );
-    res.send(user);
+    res.send(req.user.products);
   } catch (err) {
     next(err);
   }
 });
 
-router.get("/:userId/cart", async (req, res, next) => {
+router.put("/cart/checkout", requireToken, async (req, res, next) => {
   try {
-    const userId = req.params.userId;
+    const { user } = req
+    const pastOrders = [...user.pastOrders, ...user.products];
 
-    const user = await User.findByPk(userId, {
-      include: {
-        model: Product,
-        attributes: ["id", "name", "price", "imageUrl"],
-        through: { attributes: [] },
-      },
-    });
-    res.send(user.products);
-  } catch (err) {
-    next(err);
-  }
-});
+    await user.update({ pastOrders });
 
-router.put("/:userId/cart", async (req, res, next) => {
-  try {
-    const userId = req.params.userId;
-    const action = req.body.action;
-
-    const user = await User.findByPk(userId, {
-      include: {
-        model: Product,
-        attributes: ["id", "name", "price", "imageUrl"],
-        through: { attributes: [] },
-      },
-    });
-
-    const products = user.products;
-
-    const orders = [...user.pastOrders, ...products];
-
-    await user.update({ pastOrders: orders });
-
-    await user.products.map(async (product) => {
-      await user.removeProduct(product);
-
-      user.products = user.products.filter((i) => i.id != product.id);
-    });
+    user.products.forEach(async product => await user.removeProduct(product.id));
 
     res.send([]);
   } catch (err) {
@@ -87,31 +46,28 @@ router.put("/:userId/cart", async (req, res, next) => {
   }
 });
 
-router.put("/:userId/cart/:productId", async (req, res, next) => {
+router.put("/cart/add/:productId", requireToken, async (req, res, next) => {
   try {
-    const userId = req.params.userId;
-    const productId = req.params.productId;
-    const action = req.body.action;
+      const productId = req.params.productId;
+      const { user } = req
 
-    const user = await User.findByPk(userId, { include: { model: Product } });
-    const product = await Product.findByPk(productId, {
-      attributes: ["id", "name", "price", "imageUrl"],
-    });
+      const product = await Product.findByPk(productId)
+      await user.addProduct(product)
+      user.products = [...user.products, product]
+      res.send(user.products)
+  } catch (err) {
+    next(err);
+  }
+});
 
-    switch (action) {
-      case "add":
-        await user.addProduct(product);
-        user.products = [...user.products, product];
-        break;
-      case "remove":
-        await user.removeProduct(product);
-        user.products = user.products.filter((i) => i.id != product.id);
-        break;
-      default:
-        break;
-    }
+router.put("/cart/remove/:productId", requireToken, async (req, res, next) => {
+  try {
+      const productId = req.params.productId;
+      const { user } = req
 
-    res.send(user.products);
+      await user.removeProduct(productId)
+      user.products = user.products.filter(product => product.id != productId)
+      res.send(user.products)
   } catch (err) {
     next(err);
   }

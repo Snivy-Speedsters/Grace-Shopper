@@ -2,10 +2,9 @@ import React, { Component, useState } from 'react';
 import { connect } from 'react-redux';
 import {
 	fetchCartProducts,
-	updateCartProduct,
+	removeCartProduct,
 	fetchCheckout,
 } from '../store/cart';
-import { me } from '../store/auth';
 
 class Cart extends Component {
 	constructor(props) {
@@ -24,12 +23,8 @@ class Cart extends Component {
 		}
 	}
 
-	async handleCheckout(user, cart) {
-		await this.props.checkout(user, cart);
-		await this.props.auth();
-		this.setState({
-			numOfOrders: this.props.pastOrders.length,
-		});
+	async handleCheckout() {
+		await this.props.checkout();
 	}
 
 	render() {
@@ -58,16 +53,7 @@ class Cart extends Component {
 							</b>
 
 							<div>
-								<button
-									className="remove-button"
-									onClick={() => {
-										this.props.updateCartProduct(
-											this.props.userId,
-											product.id,
-											'remove'
-										);
-									}}
-								>
+								<button className="remove-button" onClick={() => {this.props.removeCartProduct(product.id,)}}>
 									Remove Buddy
 								</button>
 							</div>
@@ -86,7 +72,7 @@ class Cart extends Component {
 					<button
 						className="checkout-button"
 						onClick={() => {
-							this.handleCheckout(this.props.userId, this.props.cartProducts);
+							this.handleCheckout();
 						}}
 					>
 						Checkout
@@ -102,17 +88,12 @@ class Cart extends Component {
 
 const mapState = (state) => ({
 	cartProducts: state.cart,
-	userId: state.auth.id,
-	pastOrders: state.auth.pastOrders,
 });
 
 const mapDispatch = (dispatch) => ({
 	getCartProducts: (userId) => dispatch(fetchCartProducts(userId)),
-	updateCartProduct: (userId, productId, action) =>
-		dispatch(updateCartProduct(userId, productId, action)),
-	checkout: (userId, cartProducts) =>
-		dispatch(fetchCheckout(userId, cartProducts)),
-	auth: () => dispatch(me()),
+	removeCartProduct: (productId) => dispatch(removeCartProduct(productId)),
+	checkout: () => dispatch(fetchCheckout())
 });
 
 export default connect(mapState, mapDispatch)(Cart);
