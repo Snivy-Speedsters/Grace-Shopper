@@ -19,7 +19,7 @@ router.get("/users", requireToken, async (req, res, next) => {
   if(req.user.administrator){
     try{
       const users = await User.findAll({attributes:
-        ['firstName','lastName','email']
+        ['firstName','lastName','email', 'id']
       })
 
       res.send(users)
