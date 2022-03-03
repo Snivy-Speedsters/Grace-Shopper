@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import {connect} from 'react-redux'
 import AllUsers from './AllUsers'
+import AllProducts from './AllProducts'
 
-/**
- * COMPONENT
- */
+
 export const Admin = props => {
   const {firstName} = props
   const [adminView, setAdminView] = useState('')
@@ -14,7 +13,7 @@ export const Admin = props => {
       case 'users':
         return (<AllUsers />)
       case 'products':
-        return (<></>)
+        return (<AllProducts />)
       default:
         return (<></>)
     }
@@ -30,12 +29,10 @@ export const Admin = props => {
   )
 }
 
-/**
- * CONTAINER
- */
+
 const mapState = state => {
   return {
-    firstName: state.auth.firstName
+    firstName: state.auth.firstName,
   }
 }
 

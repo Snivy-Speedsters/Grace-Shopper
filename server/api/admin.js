@@ -50,13 +50,16 @@ router.post("/products", requireToken, async (req, res, next) => {
 router.put("/products/:productId", requireToken, async (req, res, next) => {
   if(req.user.administrator){
     try{
+      console.log('!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!\n!!!!!!!!!!')
       let product = await Product.findByPk(req.params.productId)
-      const {name, price, time} = req.body
+      const {name, price, time} = req.body.changes
 
       product = await product.set({
         name: name ? name : product.name,
         price: price ? price : product.price,
         time: time ? time : product.time})
+
+      await product.save()
 
       res.send(product)
     } catch(error) {

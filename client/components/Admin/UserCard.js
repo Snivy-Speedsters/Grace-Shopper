@@ -5,17 +5,11 @@ export const UserCard = props => {
 
   return (
     <div>
-      <h3>{firstName}</h3>
-      <h4>{lastName}</h4>
-      <h4>{email}</h4>
+      <h3>{email}</h3>
+      <h4>{firstName} {lastName}</h4>
       <hr />
     </div>
   )
 }
-
-/**
- * CONTAINER
- */
-
 
 export default UserCard
