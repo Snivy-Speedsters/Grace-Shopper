@@ -31,8 +31,10 @@ const updateCart = (product) => {
 export const fetchCartProducts = () => {
 	return async (dispatch) => {
 		try {
-			const token = window.localStorage.getItem('token')
-			const { data } = await axios.get(`/api/users/cart`, {headers: { 'authorization': token }})
+			const token = window.localStorage.getItem('token');
+			const { data } = await axios.get(`/api/users/cart`, {
+				headers: { authorization: token },
+			});
 			dispatch(setProducts(data));
 		} catch (error) {
 			console.log('fetchCart Error', error);
@@ -40,40 +42,61 @@ export const fetchCartProducts = () => {
 	};
 };
 
+export const updateCartProducts = (qty, productId) => {
+	return async (dispatch) => {
+		try {
+			const token = window.localStorage.getItem('token');
+			await axios.put(`/api/users/cart/${productId}/update`, {
+				headers: { authorization: token },
+				qty,
+			});
+			fetchCartProducts();
+		} catch (error) {
+			console.log('UpdateCart Error', error);
+		}
+	};
+};
+
 export const addCartProduct = (productId) => {
 	return async (dispatch) => {
 		try {
-			const token = window.localStorage.getItem('token')
-			const { data } = await axios.put(`/api/users/cart/add/${productId}`, {headers: { 'authorization': token }})
-			dispatch(updateCart(data))
+			const token = window.localStorage.getItem('token');
+			const { data } = await axios.put(`/api/users/cart/add/${productId}`, {
+				headers: { authorization: token },
+			});
+			dispatch(updateCart(data));
 		} catch (error) {
 			console.log('addCart Error', error);
 		}
-	}
-}
+	};
+};
 
 export const removeCartProduct = (productId) => {
 	return async (dispatch) => {
 		try {
-			const token = window.localStorage.getItem('token')
-			const { data } = await axios.put(`/api/users/cart/remove/${productId}`, {headers: { 'authorization': token }})
-			dispatch(updateCart(data))
+			const token = window.localStorage.getItem('token');
+			const { data } = await axios.put(`/api/users/cart/remove/${productId}`, {
+				headers: { authorization: token },
+			});
+			dispatch(updateCart(data));
 		} catch (error) {
-			console.log('removeCart Error', error)
+			console.log('removeCart Error', error);
 		}
-	}
-}
+	};
+};
 
 export const fetchCheckout = () => {
-  return async (dispatch) => {
-    try {
-			const token = window.localStorage.getItem('token')
-      const { data } = await axios.put(`/api/users/cart/checkout`, {headers: { 'authorization': token }});
-      dispatch(setProducts(data));
-    } catch (error) {
-      console.log("checkout Error", error);
-    }
-  };
+	return async (dispatch) => {
+		try {
+			const token = window.localStorage.getItem('token');
+			const { data } = await axios.put(`/api/users/cart/checkout`, {
+				headers: { authorization: token },
+			});
+			dispatch(setProducts(data));
+		} catch (error) {
+			console.log('checkout Error', error);
+		}
+	};
 };
 
 /*

@@ -30,14 +30,14 @@ class SingleProduct extends React.Component {
 						Add Buddy
 					</button>
 				</Link>
-				<p>
+				{/* <p>
 					Days:
 					<select>
 						{qty.map((q) => {
 							if (q != 0) return <option key={q}>{q}</option>;
 						})}
 					</select>
-				</p>
+				</p> */}
 				<div>
 					<Link to={'/products'}>
 						<button>View All Buddies</button>

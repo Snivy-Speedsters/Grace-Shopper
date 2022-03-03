@@ -1,10 +1,11 @@
-const router = require("express").Router();
+const router = require('express').Router();
 const {
-  models: { User, Product },
-} = require("../db");
+	models: { User, Product, Cart },
+} = require('../db');
 module.exports = router;
 
 const requireToken = async (req, res, next) => {
+
   try {
     const token = req.headers.authorization
       ? req.headers.authorization
@@ -15,41 +16,65 @@ const requireToken = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+
 };
 
-router.get("/", requireToken, async (req, res, next) => {
-  try {
-    res.send(req.user);
-  } catch (err) {
-    next(err);
-  }
+router.get('/', requireToken, async (req, res, next) => {
+	try {
+		res.send(req.user);
+	} catch (err) {
+		next(err);
+	}
 });
 
-router.get("/cart", requireToken, async (req, res, next) => {
-  try {
-    res.send(req.user.products);
-  } catch (err) {
-    next(err);
-  }
+router.get('/cart', requireToken, async (req, res, next) => {
+	try {
+		res.send(req.user.products);
+	} catch (err) {
+		next(err);
+	}
 });
 
-router.put("/cart/checkout", requireToken, async (req, res, next) => {
-  try {
-    const { user } = req;
-    const pastOrders = [...user.pastOrders, ...user.products];
 
-    await user.update({ pastOrders });
+router.put('/cart/:productId/update', requireToken, async (req, res, next) => {
+	try {
+		const { user } = req;
+		const { productId } = req.params;
+		const { qty } = req.body;
+		const product = await Cart.findAll({
+			where: {
+				userId: user.id,
+				productId,
+			},
+		});
 
-    user.products.forEach(
-      async (product) => await user.removeProduct(product.id)
-    );
+		await product[0].update({ qty });
+		await product[0].save();
 
-    res.send([]);
-  } catch (err) {
-    next(err);
-  }
+
+		res.send(product);
+	} catch (err) {
+		next(err);
+	}
 });
 
+router.put('/cart/checkout', requireToken, async (req, res, next) => {
+	try {
+		const { user } = req;
+		const pastOrders = [...user.pastOrders, ...user.products];
+
+		await user.update({ pastOrders });
+
+		user.products.forEach(
+			async (product) => await user.removeProduct(product.id)
+		);
+
+		res.send([]);
+	} catch (err) {
+		next(err);
+	}
+});
+	
 router.put("/cart/add/:productId", requireToken, async (req, res, next) => {
   try {
     const productId = req.params.productId;
@@ -75,4 +100,5 @@ router.put("/cart/remove/:productId", requireToken, async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+
 });
