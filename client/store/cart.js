@@ -28,10 +28,11 @@ const updateCart = (product) => {
  Thunks
  */
 
-export const fetchCartProducts = (userId) => {
+export const fetchCartProducts = () => {
 	return async (dispatch) => {
 		try {
-			const { data } = await axios.get(`/api/users/${userId}/cart`);
+			const token = window.localStorage.getItem('token')
+			const { data } = await axios.get(`/api/users/cart`, {headers: { authorization: token }});
 			dispatch(setProducts(data));
 		} catch (error) {
 			console.log('fetchCart Error', error);

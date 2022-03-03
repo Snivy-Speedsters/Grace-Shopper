@@ -4,53 +4,28 @@ const {
 } = require("../db");
 module.exports = router;
 
-router.get("/", async (req, res, next) => {
+const requireToken = async (req, res, next) => {
   try {
-    const users = await User.findAll({
-      // explicitly select only the id and username fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
-      attributes: ["id", "email"],
-    });
-    res.json(users);
+    const token = req.headers.authorization;
+    const user = await User.findByToken(token);
+    req.user = user;
+    next();
+  } catch(error) {
+    next(error);
+  }
+};
+
+router.get("/", requireToken, async (req, res, next) => {
+  try {
+    res.send(req.user);
   } catch (err) {
     next(err);
   }
 });
 
-router.get("/:userId", async (req, res, next) => {
+router.get("/cart", requireToken, async (req, res, next) => {
   try {
-    const userId = req.params.userId;
-
-    const user = await User.findByPk(
-      userId,
-      {
-        include: {
-          model: Product,
-          attributes: ["id", "name", "price", "imageUrl"],
-          through: { attributes: [] },
-        },
-      },
-      { attributes: ["firstName", "lastName", "email"] }
-    );
-    res.send(user);
-  } catch (err) {
-    next(err);
-  }
-});
-
-router.get("/:userId/cart", async (req, res, next) => {
-  try {
-    const userId = req.params.userId;
-
-    const user = await User.findByPk(userId, {
-      include: {
-        model: Product,
-        attributes: ["id", "name", "price", "imageUrl"],
-        through: { attributes: [] },
-      },
-    });
-    res.send(user.products);
+    res.send(req.user.products);
   } catch (err) {
     next(err);
   }
@@ -59,7 +34,6 @@ router.get("/:userId/cart", async (req, res, next) => {
 router.put("/:userId/cart", async (req, res, next) => {
   try {
     const userId = req.params.userId;
-    const action = req.body.action;
 
     const user = await User.findByPk(userId, {
       include: {
