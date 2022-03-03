@@ -6,11 +6,13 @@ module.exports = router;
 
 const requireToken = async (req, res, next) => {
   try {
-    const token = req.headers.authorization ? req.headers.authorization : req.body.headers.authorization
+    const token = req.headers.authorization
+      ? req.headers.authorization
+      : req.body.headers.authorization;
     const user = await User.findByToken(token);
     req.user = user;
     next();
-  } catch(error) {
+  } catch (error) {
     next(error);
   }
 };
@@ -33,12 +35,14 @@ router.get("/cart", requireToken, async (req, res, next) => {
 
 router.put("/cart/checkout", requireToken, async (req, res, next) => {
   try {
-    const { user } = req
+    const { user } = req;
     const pastOrders = [...user.pastOrders, ...user.products];
 
     await user.update({ pastOrders });
 
-    user.products.forEach(async product => await user.removeProduct(product.id));
+    user.products.forEach(
+      async (product) => await user.removeProduct(product.id)
+    );
 
     res.send([]);
   } catch (err) {
@@ -48,13 +52,13 @@ router.put("/cart/checkout", requireToken, async (req, res, next) => {
 
 router.put("/cart/add/:productId", requireToken, async (req, res, next) => {
   try {
-      const productId = req.params.productId;
-      const { user } = req
+    const productId = req.params.productId;
+    const { user } = req;
 
-      const product = await Product.findByPk(productId)
-      await user.addProduct(product)
-      user.products = [...user.products, product]
-      res.send(user.products)
+    const product = await Product.findByPk(productId);
+    await user.addProduct(product);
+    user.products = [...user.products, product];
+    res.send(user.products);
   } catch (err) {
     next(err);
   }
@@ -62,12 +66,12 @@ router.put("/cart/add/:productId", requireToken, async (req, res, next) => {
 
 router.put("/cart/remove/:productId", requireToken, async (req, res, next) => {
   try {
-      const productId = req.params.productId;
-      const { user } = req
+    const productId = req.params.productId;
+    const { user } = req;
 
-      await user.removeProduct(productId)
-      user.products = user.products.filter(product => product.id != productId)
-      res.send(user.products)
+    await user.removeProduct(productId);
+    user.products = user.products.filter((product) => product.id != productId);
+    res.send(user.products);
   } catch (err) {
     next(err);
   }
