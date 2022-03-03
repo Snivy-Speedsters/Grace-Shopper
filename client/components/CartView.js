@@ -4,23 +4,43 @@ import {
 	fetchCartProducts,
 	removeCartProduct,
 	fetchCheckout,
+	updateCartProducts,
 } from '../store/cart';
 
 class Cart extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			qty: 0,
 			numOfOrders: 0,
 		};
-
+		this.handleChange = this.handleChange.bind(this);
 		this.handleCheckout = this.handleCheckout.bind(this);
 	}
 	componentDidMount() {
 		try {
 			this.props.getCartProducts(this.props.userId);
+			this.setState({
+				qty: this.props.cartProducts.qty,
+			});
 		} catch (error) {
 			console.log(error);
 		}
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.cartProducts !== this.props.cartProducts) {
+			this.setState({
+				qty: this.props.cartProducts.qty,
+			});
+		}
+	}
+
+	handleChange(e, productId) {
+		this.setState({
+			qty: e.target.value,
+		});
+		this.props.updateCartProducts(e.target.value, productId);
 	}
 
 	async handleCheckout() {
@@ -28,7 +48,9 @@ class Cart extends Component {
 	}
 
 	render() {
-		let qty = [0, 1, 2, 3, 4, 5, 6, 7];
+		const { handleChange } = this;
+		const { qty } = this.state;
+		let qtyArr = [0, 1, 2, 3, 4, 5, 6, 7];
 		let addedProducts = this.props.cartProducts.length ? (
 			this.props.cartProducts.map((product) => {
 				return (
@@ -44,16 +66,27 @@ class Cart extends Component {
 							</p>
 							<b>
 								Days:
-								<select>
-									<option>{'Chosen Qty'}</option>
-									{qty.map((q) => {
-										if (q != 0) return <option key={q}>{q}</option>;
+								<select
+									value={qty}
+									onChange={(e) => {
+										handleChange(e, product.id);
+									}}
+								>
+									<option>{product.cart.qty}</option>
+									{qtyArr.map((q) => {
+										if (q != 0 && q != product.cart.qty)
+											return <option key={q}>{q}</option>;
 									})}
 								</select>
 							</b>
 
 							<div>
-								<button className="remove-button" onClick={() => {this.props.removeCartProduct(product.id,)}}>
+								<button
+									className="remove-button"
+									onClick={() => {
+										this.props.removeCartProduct(product.id);
+									}}
+								>
 									Remove Buddy
 								</button>
 							</div>
@@ -93,7 +126,9 @@ const mapState = (state) => ({
 const mapDispatch = (dispatch) => ({
 	getCartProducts: (userId) => dispatch(fetchCartProducts(userId)),
 	removeCartProduct: (productId) => dispatch(removeCartProduct(productId)),
-	checkout: () => dispatch(fetchCheckout())
+	updateCartProducts: (qty, productId) =>
+		dispatch(updateCartProducts(qty, productId)),
+	checkout: () => dispatch(fetchCheckout()),
 });
 
 export default connect(mapState, mapDispatch)(Cart);
