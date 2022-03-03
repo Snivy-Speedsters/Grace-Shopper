@@ -1,3 +1,4 @@
+
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
@@ -11,10 +12,10 @@ import Cart from "./components/CartView";
 import Admin from "./components/Admin/Admin";
 import SingleProductEdit from "./components/Admin/SingleProductEdit";
 import OrderHistory from "./components/OrderHistory";
+import SingleProductAdd from './components/Admin/SingleProductAdd';
 
-/**
- * COMPONENT
- */
+
+
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData();
@@ -23,25 +24,20 @@ class Routes extends Component {
   render() {
     const { isLoggedIn, isAdmin } = this.props;
 
-    return (
-      <div>
-        {isLoggedIn ? (
-          <Switch>
-            <Route path="/home" component={Home} />
-            <Route path="/products" exact component={AllProducts} />
-            <Route path="/products/:productId" component={SingleProduct} />
-            <Route path="/cart" component={Cart} />
-            <Route path="/orderHistory" component={OrderHistory} />
-            {isAdmin ? (
-              <Route
-                path="/admin/products/:productId"
-                component={SingleProductEdit}
-              />
-            ) : (
-              <></>
-            )}
-            {isAdmin ? <Route path="/admin" exact component={Admin} /> : <></>}
 
+
+		return (
+			<div>
+				{isLoggedIn ? (
+					<Switch>
+						<Route path="/home" component={Home} />
+						<Route path="/products" exact component={AllProducts} />
+						<Route path="/products/:productId" component={SingleProduct} />
+						<Route path="/cart" component={Cart} />
+              <Route path="/orderHistory" component={OrderHistory} />
+						{isAdmin ? (<Route path="/admin/products/add" exact component={SingleProductAdd} />):(<></>)}
+						{isAdmin ? (<Route path="/admin/products/:productId" component={SingleProductEdit} />):(<></>)}
+						{isAdmin ? (<Route path="/admin" exact component={Admin} />) : (<></>)}
             <Route path="/admin" component={Admin} />
             <Redirect to="/home" />
           </Switch>
@@ -59,9 +55,7 @@ class Routes extends Component {
   }
 }
 
-/**
- * CONTAINER
- */
+
 const mapState = (state) => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.auth that has a truthy id.

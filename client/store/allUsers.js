@@ -7,7 +7,7 @@ export const setUsers = (users) => ({ type: SET_USERS, users });
 export const fetchUsers = () => async (dispatch) => {
   const token = window.localStorage.getItem('token');
   if (token) {
-    const { data } = await axios.get("api/admin/users", { headers: { authorization: token }});
+    const { data } = await axios.get("/api/admin/users", { headers: { authorization: token }});
     return dispatch(setUsers(data));
   }
 };
