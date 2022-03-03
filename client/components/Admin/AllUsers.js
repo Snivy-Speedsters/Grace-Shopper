@@ -18,14 +18,14 @@ export const AllUsers = props => {
   }, [])
 
   useEffect(() => {
-    setUsers(allUsers)
+      setUsers(allUsers)
   }, [allUsers])
 
 
   return (
     <div>
       {
-      users.length === 0 ?
+      users.length === 0 || !Array.isArray(users) ?
       <h3>No Users</h3> :
       users.map(user => (<UserCard user={user} key={user.id}/>))
       }

@@ -34,9 +34,9 @@ router.get("/users", requireToken, async (req, res, next) => {
 router.post("/products", requireToken, async (req, res, next) => {
   if(req.user.administrator){
     try{
-      const { name, price, time, imageUrl } = req.body
+      const { name, price } = req.body.product
 
-      const product = await Product.create({ name, price, time, imageUrl })
+      const product = await Product.create({ name, price })
 
       res.send(product)
     } catch(error) {

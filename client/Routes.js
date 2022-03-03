@@ -10,10 +10,9 @@ import SingleProduct from './components/SingleProduct';
 import Cart from './components/CartView';
 import Admin from './components/Admin/Admin';
 import SingleProductEdit from './components/Admin/SingleProductEdit';
+import SingleProductAdd from './components/Admin/SingleProductAdd';
 
-/**
- * COMPONENT
- */
+
 class Routes extends Component {
 	componentDidMount() {
 		this.props.loadInitialData();
@@ -30,6 +29,7 @@ class Routes extends Component {
 						<Route path="/products" exact component={AllProducts} />
 						<Route path="/products/:productId" component={SingleProduct} />
 						<Route path="/cart" component={Cart} />
+						{isAdmin ? (<Route path="/admin/products/add" exact component={SingleProductAdd} />):(<></>)}
 						{isAdmin ? (<Route path="/admin/products/:productId" component={SingleProductEdit} />):(<></>)}
 						{isAdmin ? (<Route path="/admin" exact component={Admin} />) : (<></>)}
 
@@ -50,9 +50,7 @@ class Routes extends Component {
 	}
 }
 
-/**
- * CONTAINER
- */
+
 const mapState = (state) => {
 	return {
 		// Being 'logged in' for our purposes will be defined has having a state.auth that has a truthy id.
