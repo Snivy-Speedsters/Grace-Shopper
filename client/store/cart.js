@@ -43,7 +43,7 @@ export const fetchCartProducts = () => {
 export const addCartProduct = (productId) => {
 	return async (dispatch) => {
 		try {
-			const token = await window.localStorage.getItem('token')
+			const token = window.localStorage.getItem('token')
 			const { data } = await axios.put(`/api/users/cart/add/${productId}`, {headers: { 'authorization': token }})
 			dispatch(updateCart(data))
 		} catch (error) {
