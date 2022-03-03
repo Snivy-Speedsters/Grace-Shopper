@@ -82,7 +82,7 @@ class Cart extends Component {
             Checkout
           </button>
           <div>
-            <Link to={"/home"}>
+            <Link to={"/orderHistory"}>
               <button>View previous orders</button>
             </Link>
           </div>
