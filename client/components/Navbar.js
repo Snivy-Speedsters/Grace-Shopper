@@ -1,22 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../store';
 import { fetchCartProducts } from '../store/cart';
 
 const Navbar = props => {
-	const { handleClick, isLoggedIn, isAdmin, getCart, userCart } = props
-
-	const [cart, setCart] = useState([])
+	const { handleClick, isLoggedIn, isAdmin, getCart, cart } = props
 
 	useEffect(() => {
 		getCart()
 	}, [])
-
-	useEffect(() => {
-		setCart(userCart)
-	}, [userCart])
-
 
 return(
 	<div>
@@ -53,7 +46,7 @@ const mapState = (state) => {
 	return {
 		isLoggedIn: !!state.auth.id,
 		isAdmin: state.auth.administrator,
-		userCart: state.cart
+		cart: state.cart
 	};
 };
 
