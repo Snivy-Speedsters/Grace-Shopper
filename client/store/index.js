@@ -1,3 +1,5 @@
+/*
+
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { createLogger } from "redux-logger";
 import thunkMiddleware from "redux-thunk";
@@ -22,3 +24,14 @@ const store = createStore(reducer, middleware);
 
 export default store;
 export * from "./auth";
+
+*/
+
+import { configureStore } from '@reduxjs/toolkit'
+import authReducer from './auth'
+
+export default configureStore({
+  reducer: {
+    auth: authReducer
+  },
+})
