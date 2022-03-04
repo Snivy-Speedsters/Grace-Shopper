@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../store';
+import { fetchCartProducts } from '../store/cart';
 
-const Navbar = ({ handleClick, isLoggedIn, isAdmin }) => (
+const Navbar = props => {
+	const { handleClick, isLoggedIn, isAdmin, getCart, userCart } = props
+
+	const [cart, setCart] = useState([])
+
+	useEffect(() => {
+		getCart()
+	}, [])
+
+	useEffect(() => {
+		setCart(userCart)
+	}, [userCart])
+
+
+return(
 	<div>
 		<h1>FS-App-Template</h1>
 		<nav>
@@ -18,6 +33,8 @@ const Navbar = ({ handleClick, isLoggedIn, isAdmin }) => (
 					<a href="#" onClick={handleClick}>
 						Logout
 					</a>
+
+					<span>Cart: {cart.length}</span>
 				</div>
 			) : (
 				<div>
@@ -30,20 +47,20 @@ const Navbar = ({ handleClick, isLoggedIn, isAdmin }) => (
 		</nav>
 		<hr />
 	</div>
-);
+)}
 
 const mapState = (state) => {
 	return {
 		isLoggedIn: !!state.auth.id,
-		isAdmin: state.auth.administrator
+		isAdmin: state.auth.administrator,
+		userCart: state.cart
 	};
 };
 
 const mapDispatch = (dispatch) => {
 	return {
-		handleClick() {
-			dispatch(logout());
-		},
+		handleClick() { dispatch(logout()) },
+		getCart: () => dispatch(fetchCartProducts())
 	};
 };
 
