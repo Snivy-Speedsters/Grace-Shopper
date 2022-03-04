@@ -82,7 +82,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { me } from "./store/auth";
 import Home from "./components/Home"
 import Login  from "./components/Login";
-import { Signup } from "./components/SignUp";
+import Signup from "./components/SignUp";
 
 const Routes = props => {
   const isLoggedIn = !!(useSelector((state) => state.auth.id))

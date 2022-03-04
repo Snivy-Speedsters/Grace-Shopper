@@ -21,6 +21,7 @@ export const signUp = createAsyncThunk(
     try {
       const res = await axios.post(`/auth/${user.method}`, user);
       window.localStorage.setItem(TOKEN, res.data.token);
+      history.push("/")
       me()
     } catch (authError) {
       return dispatch({error: authError});

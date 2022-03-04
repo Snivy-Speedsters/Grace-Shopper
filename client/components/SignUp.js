@@ -1,9 +1,23 @@
 import React from "react";
-import { connect } from "react-redux";
-import { signUp } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import { signUp } from "../store/auth";
 
-const AuthForm = (props) => {
-  const { name, displayName, handleSubmit, error } = props;
+const SignUp = () => {
+  const error = useSelector((state) => state.auth.error)
+
+  const dispatch = useDispatch()
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault()
+    const user = {
+      method: evt.target.name,
+      email: evt.target.email.value,
+      password: evt.target.password.value,
+      firstName: evt.target.firstName.value,
+      lastName: evt.target.lastName.value
+    }
+    dispatch(signUp(user))
+  }
 
   return (
     <div>
@@ -42,32 +56,4 @@ const AuthForm = (props) => {
   );
 };
 
-/**
- * CONTAINER
- *   Note that we have two different sets of 'mapStateToProps' functions -
- *   one for Login, and one for Signup. However, they share the same 'mapDispatchToProps'
- *   function, and share the same Component. This is a good example of how we
- *   can stay DRY with interfaces that are very similar to each other!
- */
-
-const mapSignup = (state) => {
-  return {
-    error: state.auth.error,
-  };
-};
-
-const mapDispatch = (dispatch) => {
-  return {
-    handleSubmit(evt) {
-      evt.preventDefault();
-      const formName = evt.target.name;
-      const firstName = evt.target.firstName.value;
-      const lastName = evt.target.lastName.value;
-      const email = evt.target.email.value;
-      const password = evt.target.password.value;
-      dispatch(signUp(firstName, lastName, email, password, formName));
-    },
-  };
-};
-
-export const Signup = connect(mapSignup, mapDispatch)(AuthForm);
+export default SignUp

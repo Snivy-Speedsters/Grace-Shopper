@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/auth";
 
 const Login = () => {
-
-  console.log('asdasd')
   const name = 'login'
   const displayName = 'Login'
   const error = useSelector((state) => state.auth.error)
@@ -16,7 +14,7 @@ const Login = () => {
     const user = {
       method: evt.target.name,
       email: evt.target.email.value,
-      password: evt.target.password.value
+      password: evt.target.password.value,
     }
     dispatch(login(user))
   }
