@@ -12,7 +12,7 @@ const ProductCheckoutCard = props => {
     const outputArray = []
     let i = 1
     while(i <= amount){
-      outputArray.push(<option value={i} >{i}</option>)
+      outputArray.push(<option value={i} key={`p${id}-o${i}`}>{i}</option>)
       i = i + 1
     }
     return outputArray

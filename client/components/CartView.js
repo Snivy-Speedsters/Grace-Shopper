@@ -6,7 +6,7 @@ import ProductCheckoutCard from './Cards/ProductCheckoutCard'
 
 
 export const Cart = props => {
-	const { userCart, checkout } = props
+	const { currentCart, checkout } = props
 
 	const handleCheckout = () => {
 		alert("Proceed with checkout?");
@@ -16,8 +16,8 @@ export const Cart = props => {
 	return(
 		<div>
 			<h3>Current Cart</h3>
-			{!userCart.length ? <h4>No items in cart</h4> :
-				userCart.map(product => <ProductCheckoutCard product={product} key={product.id} />)
+			{!currentCart.length ? <h4>No items in cart</h4> :
+				currentCart.map(product => <ProductCheckoutCard product={product} key={product.id} />)
 			}
 			<button onClick={handleCheckout}>Checkout</button>
 			<Link to={"/orderHistory"}>
@@ -28,7 +28,7 @@ export const Cart = props => {
 }
 
 const mapState = (state) => ({
-  userCart: state.cart,
+  currentCart: state.cart,
 });
 
 const mapDispatch = (dispatch) => ({

@@ -35,6 +35,7 @@ export const fetchCartProducts = () => {
 			const { data } = await axios.get(`/api/users/cart`, {
 				headers: { authorization: token },
 			});
+			console.log('here')
 			dispatch(setCart(data));
 		} catch (error) {
 			console.log('fetchCart Error', error);
@@ -61,10 +62,10 @@ export const addCartProduct = (productId) => {
 	return async (dispatch) => {
 		try {
 			const token = window.localStorage.getItem('token');
-			const { data } = await axios.put(`/api/users/cart/add/${productId}`, {
+			await axios.put(`/api/users/cart/add/${productId}`, {
 				headers: { authorization: token },
 			});
-			dispatch(updateCart(data));
+			fetchCartProducts()
 		} catch (error) {
 			console.log('addCart Error', error);
 		}
@@ -106,11 +107,7 @@ export const fetchCheckout = () => {
 export default function cartReducer(state = initialState, action) {
 	switch (action.type) {
 		case SET_CART:
-			return action.product;
-		case UPDATE_CART:
-			return state.map((product) => {
-				return product.id === action.product.id ? action.product : product;
-			});
+			return action.product
 		default:
 			return state;
 	}
