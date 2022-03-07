@@ -1,40 +1,53 @@
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios"
 
-const SET_SINGLE_PRODUCT = 'SET_SINGLE_PRODUCT';
+const TOKEN = "token"
 
-const setSingleProduct = (product) => ({
-	type: SET_SINGLE_PRODUCT,
-	product,
-});
+export const fetchSingleProduct = createAsyncThunk(
+  '/product/fetch',
+  async (id) => {
+    const { data } = await axios.get(`/api/products/${id}`);
+    return data
+  }
+)
 
-export const fetchSingleProduct = (id) => async (dispatch) => {
-	const { data } = await axios.get(`/api/products/${id}`);
-	dispatch(setSingleProduct(data));
-};
+export const updateSingleProduct = createAsyncThunk(
+  '/product/update',
+  async(product) => {
+    const token = window.localStorage.getItem(TOKEN);
+    const { id, changes } = product
+    await axios.put(`/api/admin/products/${id}`, { changes, headers: { 'authorization': token }});
+    fetchSingleProduct(id)
+  }
+)
 
-export const updateSingleProduct = (id, changes) => async (dispatch) => {
-	const token = window.localStorage.getItem('token')
-	const { data } = await axios.put(`/api/admin/products/${id}`, { changes, headers: { 'authorization': token }});
-	dispatch(setSingleProduct(data));
-};
+export const deleteSingleProduct = createAsyncThunk(
+  '/product/delete',
+  async(id) => {
+    const token = window.localStorage.getItem(TOKEN);
+    await axios.delete(`/api/admin/products/${id}`, { headers: { 'authorization': token }});
+  }
+)
 
-export const deleteSingleProduct = (id) => async (dispatch) => {
-	const token = window.localStorage.getItem('token')
-	const { data } = await axios.delete(`/api/admin/products/${id}`, { headers: { 'authorization': token }});
-	dispatch(setSingleProduct(data));
-};
+export const createSingleProduct = createAsyncThunk(
+  '/product/create',
+  async(product) => {
+    const token = window.localStorage.getItem(TOKEN);
+    await axios.post(`/api/admin/products/`, { product, headers: { 'authorization': token }});
+  }
+)
 
-export const createSingleProduct = (id, product) => async (dispatch) => {
-	const token = window.localStorage.getItem('token')
-	const { data } = await axios.post(`/api/admin/products/`, { product, headers: { 'authorization': token }});
-	dispatch(setSingleProduct(data));
-};
+const initialState = {}
 
-export default function productReducer(state = {}, action) {
-	switch (action.type) {
-		case SET_SINGLE_PRODUCT:
-			return action.product;
-		default:
-			return state;
-	}
-}
+export const singleProductSlice = createSlice({
+  name: 'singleProduct',
+  initialState,
+  reducers: {},
+  extraReducers(builder){
+    builder.addCase(fetchSingleProduct.fulfilled, (state, { payload }) => {
+      return payload
+    })
+  }
+})
+
+export default singleProductSlice.reducer

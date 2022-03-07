@@ -115,7 +115,6 @@ function Routes(){
 						{auth.administrator ? (<Route path="/admin/products/add" exact component={SingleProductAdd} />):(<></>)}
 						{auth.administrator ? (<Route path="/admin/products/:productId" component={SingleProductEdit} />):(<></>)}
 						{auth.administrator ? (<Route path="/admin" exact component={Admin} />) : (<></>)}
-            <Route path="/admin" component={Admin} />
             <Redirect to="/home" />
           </Switch>
         )}

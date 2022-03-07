@@ -1,12 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { updateCartProducts } from "../../store/cart";
-import { connect } from "react-redux";
+import { updateProductQty, removeFromCart, fetchCart } from "../../store/cart";
+import { useDispatch } from "react-redux";
 
 const ProductCheckoutCard = props => {
-  const { updateCart } = props
   const { imageUrl, name, price, id} = props.product
   const { qty } = props.product.cart
+
+  const dispatch = useDispatch()
+
+
 
   const qtyDropdown = (amount) => {
     const outputArray = []
@@ -16,6 +19,19 @@ const ProductCheckoutCard = props => {
       i = i + 1
     }
     return outputArray
+  }
+
+  const handleUpdate = (qty, productId) => {
+    const updatedProduct = {
+      qty,
+      productId
+    }
+    dispatch(updateProductQty(updatedProduct))
+  }
+
+  const handleRemove = (id) => {
+    dispatch(removeFromCart(id))
+    .then(() => {dispatch(fetchCart())})
   }
 
   return (
@@ -29,16 +45,12 @@ const ProductCheckoutCard = props => {
       </Link>
 
       <h3>{price}</h3>
-      <select defaultValue={qty} onChange={(event) => {updateCart(event.target.value, id)}}>
+      <select defaultValue={qty} onChange={(event) => {handleUpdate(event.target.value, id)}}>
         {qtyDropdown(7)}
       </select>
-      <button>Remove</button>
+      <button onClick={() => {handleRemove(id)}}>Remove</button>
     </div>
   )
 }
 
-const mapDispatch = dispatch => ({
-  updateCart: (qty, id) => {dispatch(updateCartProducts(qty, id))}
-})
-
-export default connect(null, mapDispatch)(ProductCheckoutCard);
+export default ProductCheckoutCard;

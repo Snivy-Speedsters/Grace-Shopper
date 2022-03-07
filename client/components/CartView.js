@@ -1,38 +1,31 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { fetchCheckout } from '../store/cart';
 import ProductCheckoutCard from './Cards/ProductCheckoutCard'
 
 
-export const Cart = props => {
-	const { currentCart, checkout } = props
+export const Cart = () => {
+	const cart = useSelector((state) => state.cart.products)
+
+	const dispatch = useDispatch()
+	const history = useHistory()
 
 	const handleCheckout = () => {
 		alert("Proceed with checkout?");
-		checkout()
+		dispatch(fetchCheckout())
 	}
 
 	return(
 		<div>
 			<h3>Current Cart</h3>
-			{!currentCart.length ? <h4>No items in cart</h4> :
-				currentCart.map(product => <ProductCheckoutCard product={product} key={product.id} />)
+			{!cart.length ? <h4>No items in cart</h4> :
+				cart.map(product => <ProductCheckoutCard product={product} key={product.id} />)
 			}
 			<button onClick={handleCheckout}>Checkout</button>
-			<Link to={"/orderHistory"}>
-				<button>Previous Orders</button>
-			</Link>
+			<button onClick={() => {history.push('/orderHistory')}}>Previous Orders</button>
 		</div>
 	)
 }
 
-const mapState = (state) => ({
-  currentCart: state.cart,
-});
-
-const mapDispatch = (dispatch) => ({
-	checkout: () => dispatch(fetchCheckout()),
-});
-
-export default connect(mapState, mapDispatch)(Cart);
+export default Cart;

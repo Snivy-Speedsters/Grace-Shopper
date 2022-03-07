@@ -1,23 +1,26 @@
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios"
 
-const SET_USERS = 'SET_USERS'
+const TOKEN = "token"
 
-export const setUsers = (users) => ({ type: SET_USERS, users });
-
-export const fetchUsers = () => async (dispatch) => {
-  const token = window.localStorage.getItem('token');
-  if (token) {
+export const fetchUsers = createAsyncThunk(
+  '/users/fetch',
+  async () => {
+    const token = window.localStorage.getItem(TOKEN)
     const { data } = await axios.get("/api/admin/users", { headers: { authorization: token }});
-    return dispatch(setUsers(data));
-  }
-};
+    return data
+	}
+)
 
-
-export default function (state = [], action) {
-  switch (action.type) {
-    case SET_USERS:
-      return action.users;
-    default:
-      return state;
+export const usersSlice = createSlice({
+  name: 'users',
+  initialState: [],
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase (fetchUsers.fulfilled, (state, action) => {
+      return action.payload
+    })
   }
-}
+})
+
+export default usersSlice.reducer

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { fetchSingleProduct, updateSingleProduct, deleteSingleProduct } from '../../store/singleProduct'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 export const SingleProductEdit = props => {
   const id = props.match.params.productId
-  const { product, fetchProduct, updateProduct, deleteProduct } = props
+
+  const product = useSelector((state) => state.singleProduct)
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   const [name, setName] = useState('loading')
   const [price, setPrice] = useState(0.00)
   const [imageUrl, setImageUrl] = useState('loading')
-
-  const fetchData = async (id) => {
-    await fetchProduct(id)
-  }
 
   const changes = () => {
     return {
@@ -23,7 +23,7 @@ export const SingleProductEdit = props => {
   }
 
   useEffect(() => {
-    fetchData(id)
+    dispatch(fetchSingleProduct(id))
   }, [])
 
   useEffect(() => {
@@ -32,32 +32,30 @@ export const SingleProductEdit = props => {
     setImageUrl(product.imageUrl)
   }, [product])
 
+  const handleUpdate = () => {
+    const updatedProduct = {
+      id,
+      changes: changes()
+    }
+    dispatch(updateSingleProduct(updatedProduct))
+    .then(() => {history.push('/admin')})
+  }
+
+  const handleDelete = () => {
+    dispatch(deleteSingleProduct(id))
+    .then(() => {history.push('/admin')})
+  }
+
   return (
     <div>
       <img src={imageUrl} />
       <input type='text' value={name} onChange={(event) => {setName(event.target.value)}}/>
       <input type='number' value={price} onChange={(event) => {setPrice(event.target.value)}}/>
-      <Link to={`/admin/products`}>
-        <button onClick={() => {updateProduct(id, changes())}}>Submit Changes</button>
-      </Link>
-      <Link to={`/admin/products`}>
-        <button onClick={() => {deleteProduct(id)}}>Delete Buddy</button>
-      </Link>
+      <button onClick={() => {handleUpdate()}}>Submit Changes</button>
+      <button onClick={() => {handleDelete()}}>Delete Buddy</button>
       <hr />
     </div>
   )
 }
 
-
-
-const mapState = state => ({
-  product: state.product
-})
-
-const mapDispatch = dispatch => ({
-  fetchProduct: (id) => dispatch(fetchSingleProduct(id)),
-  updateProduct: (id, changes) => dispatch(updateSingleProduct(id, changes)),
-  deleteProduct: (id) => dispatch(deleteSingleProduct(id))
-})
-
-export default connect(mapState, mapDispatch)(SingleProductEdit)
+export default SingleProductEdit

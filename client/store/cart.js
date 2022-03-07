@@ -17,7 +17,6 @@ export const addToCart = createAsyncThunk(
   async (productId) => {
     const token = window.localStorage.getItem(TOKEN);
     await axios.put(`/api/users/cart/add/${productId}`, { headers: { authorization: token }});
-    fetchCart()
   }
 )
 
@@ -34,23 +33,35 @@ export const updateProductQty = createAsyncThunk(
   '/cart/update',
   async ({productId, qty}) => {
     const token = window.localStorage.getItem(TOKEN);
-    await axios.put(`/api/users/cart/remove/${productId}`, { headers: { authorization: token }, qty});
+    await axios.put(`/api/users/cart/${productId}/update`, { headers: { authorization: token }, qty});
+  }
+)
+
+export const fetchCheckout = createAsyncThunk(
+  '/cart/checkout',
+  async () => {
+    const token = window.localStorage.getItem(TOKEN);
+    await axios.put(`/api/users/cart/checkout`, { headers: { authorization: token }});
     fetchCart()
   }
 )
 
+const initialState = {
+  products: [],
+  amount: 0
+}
+
 export const cartSlice = createSlice({
   name: 'cart',
-  initialState: {
-    products: [],
-    amount: 0
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase (fetchCart.fulfilled, (state, action) => {
-      return {products: action.payload, amount: action.payload.length}
+      const products = action.payload
+      const amount = action.payload.length
+      return {products, amount}
     })
-  }
+  },
 })
 
 export default cartSlice.reducer

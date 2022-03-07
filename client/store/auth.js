@@ -35,7 +35,6 @@ export const login = createAsyncThunk(
     try {
       const res = await axios.post(`/auth/${user.method}`, user);
       window.localStorage.setItem(TOKEN, res.data.token);
-      me()
     } catch (authError) {
       return dispatch({error: authError});
     }
@@ -43,6 +42,7 @@ export const login = createAsyncThunk(
 )
 
 const initialState = {}
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,

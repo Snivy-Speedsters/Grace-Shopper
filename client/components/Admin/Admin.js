@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import {connect} from 'react-redux'
+import { useSelector } from 'react-redux'
 import AllUsers from './AllUsers'
 import AllProducts from './AllProducts'
 
 
-export const Admin = props => {
-  const {firstName} = props
+export const Admin = () => {
+  const firstName = useSelector((state) => state.auth.firstName)
   const [adminView, setAdminView] = useState('')
 
   const currentView = (view) => {
@@ -19,6 +19,8 @@ export const Admin = props => {
     }
   }
 
+  console.log('here')
+
   return (
     <div>
       <h3>Hello, admin {firstName}</h3>
@@ -29,11 +31,4 @@ export const Admin = props => {
   )
 }
 
-
-const mapState = state => {
-  return {
-    firstName: state.auth.firstName,
-  }
-}
-
-export default connect(mapState)(Admin)
+export default Admin

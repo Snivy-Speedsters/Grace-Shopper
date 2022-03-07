@@ -1,12 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../store/auth";
+import { login, me } from "../store/auth";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const name = 'login'
   const displayName = 'Login'
   const error = useSelector((state) => state.auth.error)
 
+  const history = useHistory()
   const dispatch = useDispatch()
 
   const handleSubmit = async (evt) => {
@@ -17,6 +19,8 @@ const Login = () => {
       password: evt.target.password.value,
     }
     dispatch(login(user))
+    .then(() => {dispatch(me())})
+    .then(() => {history.push('/home')})
   }
 
 

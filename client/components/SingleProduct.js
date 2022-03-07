@@ -1,24 +1,27 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchSingleProduct } from '../store/singleProduct';
-import { addCartProduct, fetchCartProducts } from '../store/cart';
+import { addToCart, fetchCart } from '../store/cart';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const SingleProduct = props => {
-	const { getProduct, addProduct, updateCart, product } = props
 	const { productId } = props.match.params
-	const { imageUrl, name, price } = props.product
+	const product = useSelector((state) => state.singleProduct)
+	const { imageUrl, name, price } = product
+
+	const dispatch = useDispatch()
+	const history = useHistory()
 
 	useEffect(() => {
-		getProduct(productId)
+		dispatch(fetchSingleProduct(productId))
 	}, [])
 
-	const handleAdd = async (productId) => {
-		addProduct(productId)
-		updateCart()
+	const handleAdd = () => {
+		dispatch(addToCart(productId))
+		.then(() => {dispatch(fetchCart())})
+		.then(() => {history.push('/products')})
 	}
-
-	console.log(productId)
 
 	return(
 	<div>
@@ -28,9 +31,7 @@ const SingleProduct = props => {
 				<img src={imageUrl} />
 				<p>Name: {name}</p>
 				<p>Price: ${price}</p>
-				<Link to={'/products'}>
-					<button onClick={() => {handleAdd(productId)}}>Add to Cart</button>
-				</Link>
+				<button onClick={() => {handleAdd()}}>Add to Cart</button>
 				<Link to={'/products'}>
 					<button>View All Buddies</button>
 				</Link>
@@ -40,14 +41,4 @@ const SingleProduct = props => {
 	)
 }
 
-const mapState = (state) => ({
-	product: state.product
-});
-
-const mapDispatch = (dispatch) => ({
-	getProduct: (id) => dispatch(fetchSingleProduct(id)),
-	addProduct: (productId) => dispatch(addCartProduct(productId)),
-	updateCart: () => dispatch(fetchCartProducts())
-});
-
-export default connect(mapState, mapDispatch)(SingleProduct);
+export default SingleProduct;
