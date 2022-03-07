@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../../store/auth"
+import { updateUser, me } from "../../store/auth"
+import { useHistory } from "react-router-dom";
 
 const EditUser = () => {
   const user = useSelector((state) => state.auth)
@@ -11,6 +12,7 @@ const EditUser = () => {
   const [shippingAddress, setShippingAddress] = useState(user.shippingAddress)
 
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const handleUpdate = () => {
     const updatedUser = {
@@ -20,6 +22,7 @@ const EditUser = () => {
       shippingAddress,
     }
     dispatch(updateUser(updatedUser))
+    .then(() => {dispatch(me())})
   }
 
 

@@ -16,13 +16,21 @@ const Profile = () => {
     }
   }
 
+  const handleView = (newView) => {
+    if(newView === view){
+      setView('')
+    } else {
+      setView(newView)
+    }
+  }
+
   return(
     <div>
       <h3>Hello {user.firstName} {user.lastName}!</h3>
       <h4>{user.email}</h4>
       <h4>{user.shippingAddress}</h4>
 
-      <button onClick={() => {setView('edit')}}>Edit User</button>
+      <button onClick={() => {handleView('edit')}}>Edit User</button>
       {currentView(view)}
     </div>
   )
