@@ -1,13 +1,73 @@
 'use strict'
 
-const {db, models: {User, Product} } = require('../server/db')
+const { db, models: {User, Product, Tag, TagTable} } = require('../server/db')
 const createUser = require('./userCreator')
 const createProduct = require('./productCreator')
+const { createTag, maleTags, femaleTags } = require('./tagCreator')
 
 // Change number to the desired amount of users and products to be generated
 const userAmount = 20
 const productAmount = 20
 const productIds = []
+const tags = []
+
+const userSeed = async () => {
+  for(let i = 0; i < userAmount; i++){
+    await User.create(createUser())
+  }
+}
+
+const productSeed = async () => {
+  for(let i = 0; i < productAmount; i++){
+    const product = createProduct(i + 1)
+    const tags = createTag(product)
+
+    await Product.create(product)
+    .then(() => tagTableSeed((i + 1), tags))
+
+    if((Math.floor(Math.random() * 10)) < 5){
+      productIds.push(i + 1)
+    } else if(i === 0){
+      productIds.push(i + 1)
+    }
+  }
+}
+
+const maleTagsSeed = async () => {
+  for(let i = 0; i < maleTags.length; i++){
+    await Tag.findOrCreate({where: {name: maleTags[i]}})
+
+    if(!tags.includes(maleTags[i])){
+      tags.push(maleTags[i])
+    }
+  }
+}
+
+const femaleTagsSeed = async () => {
+  for(let i = 0; i < femaleTags.length; i++){
+    await Tag.findOrCreate({where: {name: femaleTags[i]}})
+
+    if(!tags.includes(femaleTags[i])){
+      tags.push(femaleTags[i])
+    }
+  }
+}
+
+const cartSeed = async () => {
+  for(let i = 0; i < productIds.length; i++){
+    const user = await User.findByPk(((Math.floor(Math.random() * productAmount) + 1)))
+    await user.addProduct(productIds[i + 1])
+  }
+}
+
+const tagTableSeed = async (productId, tags) => {
+  for(let i = 0; i < tags.length; i++){
+    let tagId = (tags.indexOf(tags[i]) + 1)
+    // console.log(productId, tagId)
+    await TagTable.create({productId, tagId})
+  }
+}
+
 
 /**
  * seed - this function clears the database, updates tables to
@@ -17,29 +77,16 @@ async function seed() {
   await db.sync({ force: true }) // clears db and matches models to tables
   console.log('db synced!')
 
-  for(let i = 0; i < userAmount; i++){
-    await User.create(createUser())
-  }
+  await userSeed()
+  .then(async () => {await maleTagsSeed()})
+  .then(async () => {await femaleTagsSeed()})
+  .then(async () => {await productSeed()})
+  .then(async () => {await cartSeed()})
 
-  for(let i = 0; i < productAmount; i++){
-    await Product.create(createProduct(i + 1))
-
-    if((Math.floor(Math.random() * 10)) < 5){
-      productIds.push(i + 1)
-    } else if(i === 0){
-      productIds.push(i + 1)
-    }
-  }
-
-  for(let i = 0; i < productIds.length; i++){
-    const user = await User.findByPk(((Math.floor(Math.random() * productAmount) + 1)))
-    await user.addProduct(productIds[i + 1])
-  }
-
-  const testUser = await User.create({firstName: 'John', lastName: 'Doe', email: 'test@email.com', password: '123', address: '123 Road Lane'})
+  const testUser = await User.create({firstName: 'John', lastName: 'Doe', email: 'test@email.com', password: '123', shippingAddress: '123 Road Lane'})
   await testUser.addProducts([1, 2, 3])
 
-  await User.create({firstName: 'Jane', lastName: 'Doe', email: 'testAdmin@email.com', password: '123', address: '456 Lane Road', administrator: true})
+  await User.create({firstName: 'Jane', lastName: 'Doe', email: 'testAdmin@email.com', password: '123', shippingAddress: '456 Lane Road', administrator: true})
 
   console.log(`seeded successfully`)
 }
