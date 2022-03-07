@@ -12,6 +12,7 @@ import Admin from './components/Admin/Admin';
 import SingleProductEdit from './components/Admin/SingleProductEdit';
 import OrderHistory from './components/OrderHistory';
 import SingleProductAdd from './components/Admin/SingleProductAdd';
+import Profile from "./components/User/Profile";
 
 import { fetchCart } from './store/cart';
 import { makePayment } from './components/Checkout/makePayment';

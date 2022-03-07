@@ -40,6 +40,7 @@ export const updateProductQty = createAsyncThunk(
 	}
 );
 
+
 export const fetchCheckout = createAsyncThunk('/cart/checkout', async () => {
 	const token = window.localStorage.getItem(TOKEN);
 	await axios.put(`/api/users/cart/checkout`, {

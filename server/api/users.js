@@ -27,6 +27,17 @@ router.get('/', requireToken, async (req, res, next) => {
 	}
 });
 
+router.put('/update', requireToken, async (req, res, next) => {
+	try {
+		const { firstName, lastName, email, shippingAddress } = req.body.updatedUser
+		const { user } = req
+		await user.update({firstName, lastName, email, shippingAddress})
+		res.send(user);
+	} catch (err) {
+		next(err);
+	}
+})
+
 router.get('/cart', requireToken, async (req, res, next) => {
 	try {
 		res.send(req.user.products);

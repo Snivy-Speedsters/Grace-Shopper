@@ -41,6 +41,16 @@ export const login = createAsyncThunk(
   }
 )
 
+
+// Move to own store evetually
+export const updateUser = createAsyncThunk(
+  'user/update',
+  async (updatedUser) => {
+    const token = window.localStorage.getItem(TOKEN);
+    await axios.put(`/api/users/update`, { headers: { authorization: token }, updatedUser})
+  }
+)
+
 const initialState = {}
 
 export const authSlice = createSlice({

@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  background-color: #fff3b0;
 }
 
 a {
@@ -9,13 +10,44 @@ a {
 label {
   display: block;
 }
+nav {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: right;
+  padding-right: 50px;
+}
 
 nav a {
+  align-items: center;
   display: inline-block;
   margin: 1em;
+  color: black;
+  font-size: 20px;
 }
 
 form div {
   margin: 1em;
   display: inline-block;
+}
+
+.product {
+  margin: 10px;
+  width: 400px;
+  height: 600px;
+  border: 10px;
+}
+.product-container {
+  flex-wrap: wrap;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+}
+.product-text {
+  color: black;
+}
+.product-text {
+  color: black;
 }
