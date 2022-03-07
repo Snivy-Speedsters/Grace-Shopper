@@ -1,79 +1,68 @@
-import axios from "axios";
-import history from "../history";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios"
+import history from "../history"
 
-const TOKEN = "token";
+const TOKEN = "token"
 
-/**
- * ACTION TYPES
- */
-const SET_AUTH = "SET_AUTH";
-
-/**
- * ACTION CREATORS
- */
-const setAuth = (auth) => ({ type: SET_AUTH, auth });
-
-/**
- * THUNK CREATORS
- */
-export const me = () => async (dispatch) => {
-  const token = window.localStorage.getItem(TOKEN);
-  if (token) {
-    const res = await axios.get("/auth/me", {
-      headers: {
-        authorization: token,
-      },
-    });
-    return dispatch(setAuth(res.data));
-  }
-};
-
-export const signUp =
-  (firstName, lastName, email, password, method) => async (dispatch) => {
-    try {
-      const res = await axios.post(`/auth/${method}`, {
-        firstName,
-        lastName,
-        email,
-        password,
-      });
-      window.localStorage.setItem(TOKEN, res.data.token);
-      dispatch(me());
-    } catch (authError) {
-      return dispatch(setAuth({ error: authError }));
+export const me = createAsyncThunk(
+  '/auth/me',
+  async () => {
+    const token = window.localStorage.getItem(TOKEN);
+    if (token) {
+      const { data } = await axios.get("/auth/me", { headers: { authorization: token }});
+      return data
     }
-  };
-
-export const login = (email, password, method) => async (dispatch) => {
-  try {
-    const res = await axios.post(`/auth/${method}`, {
-      email,
-      password,
-    });
-    window.localStorage.setItem(TOKEN, res.data.token);
-    dispatch(me());
-  } catch (authError) {
-    return dispatch(setAuth({ error: authError }));
   }
-};
+)
 
-export const logout = () => {
-  window.localStorage.removeItem(TOKEN);
-  history.push("/login");
-  return {
-    type: SET_AUTH,
-    auth: {},
-  };
-};
-
-/**
- * REDUCER
- */
-export default function (state = {}, action) {
-  switch (action.type) {
-    case SET_AUTH:
-      return action.auth;
-    default:
-      return state;
+export const signUp = createAsyncThunk(
+  '/auth/signup',
+  async (user, { dispatch }) => {
+    try {
+      const res = await axios.post(`/auth/${user.method}`, user);
+      window.localStorage.setItem(TOKEN, res.data.token);
+      history.push("/")
+      me()
+    } catch (authError) {
+      return dispatch({error: authError});
+    }
   }
-}
+)
+
+export const login = createAsyncThunk(
+  'auth/signin',
+  async (user, { dispatch }) => {
+    try {
+      const res = await axios.post(`/auth/${user.method}`, user);
+      window.localStorage.setItem(TOKEN, res.data.token);
+    } catch (authError) {
+      return dispatch({error: authError});
+    }
+  }
+)
+
+const initialState = {}
+
+export const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    setError: (state, action) => {
+      return action.payload
+    },
+    logOut: () => {
+      window.localStorage.removeItem(TOKEN);
+      history.push("/login");
+      return initialState
+    },
+  },
+  extraReducers(builder){
+    builder.addCase(me.fulfilled, (state, { payload }) => {
+      return payload
+    })
+  }
+})
+
+export const { logOut } = authSlice.actions
+
+export default authSlice.reducer

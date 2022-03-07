@@ -1,39 +1,24 @@
-import axios from "axios";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios"
 
-const initialState = [];
 
-//action constants
+export const fetchProducts = createAsyncThunk(
+  '/products/fetch',
+  async () => {
+    const { data } = await axios.get("/api/products")
+    return data
+	}
+)
 
-const SET_PRODUCTS = "SET_PRODUCTS";
-
-//action creators
-
-export const setProducts = (product) => {
-  return {
-    type: SET_PRODUCTS,
-    product,
-  };
-};
-//thunk creators
-export const fetchProducts = () => {
-  return async (dispatch) => {
-    try {
-      const { data } = await axios.get("/api/products");
-      dispatch(setProducts(data));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-};
-
-//reducer
-
-export default function productsReducer(products = initialState, action) {
-  switch (action.type) {
-    case SET_PRODUCTS:
-      return action.product;
-
-    default:
-      return products;
+export const productsSlice = createSlice({
+  name: 'products',
+  initialState: [],
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase (fetchProducts.fulfilled, (state, action) => {
+      return action.payload
+    })
   }
-}
+})
+
+export default productsSlice.reducer

@@ -1,117 +1,67 @@
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios"
 
-let initialState = [];
+const TOKEN = "token"
 
-/*
- Action Type
- */
-
-const SET_PRODUCTS = 'SET_PRODUCTS';
-const UPDATE_CART = 'UPDATE_CART';
-
-/*
- Action Creator
- */
-const setProducts = (product) => ({
-	type: SET_PRODUCTS,
-	product,
-});
-
-const updateCart = (product) => {
-	return {
-		type: UPDATE_CART,
-		product,
-	};
-};
-
-/*
- Thunks
- */
-
-export const fetchCartProducts = () => {
-	return async (dispatch) => {
-		try {
-			const token = window.localStorage.getItem('token');
-			const { data } = await axios.get(`/api/users/cart`, {
-				headers: { authorization: token },
-			});
-			dispatch(setProducts(data));
-		} catch (error) {
-			console.log('fetchCart Error', error);
-		}
-	};
-};
-
-export const updateCartProducts = (qty, productId) => {
-	return async (dispatch) => {
-		try {
-			const token = window.localStorage.getItem('token');
-			await axios.put(`/api/users/cart/${productId}/update`, {
-				headers: { authorization: token },
-				qty,
-			});
-			fetchCartProducts();
-		} catch (error) {
-			console.log('UpdateCart Error', error);
-		}
-	};
-};
-
-export const addCartProduct = (productId) => {
-	return async (dispatch) => {
-		try {
-			const token = window.localStorage.getItem('token');
-			const { data } = await axios.put(`/api/users/cart/add/${productId}`, {
-				headers: { authorization: token },
-			});
-			dispatch(updateCart(data));
-		} catch (error) {
-			console.log('addCart Error', error);
-		}
-	};
-};
-
-export const removeCartProduct = (productId) => {
-	return async (dispatch) => {
-		try {
-			const token = window.localStorage.getItem('token');
-			const { data } = await axios.put(`/api/users/cart/remove/${productId}`, {
-				headers: { authorization: token },
-			});
-			dispatch(updateCart(data));
-		} catch (error) {
-			console.log('removeCart Error', error);
-		}
-	};
-};
-
-export const fetchCheckout = () => {
-	return async (dispatch) => {
-		try {
-			const token = window.localStorage.getItem('token');
-			const { data } = await axios.put(`/api/users/cart/checkout`, {
-				headers: { authorization: token },
-			});
-			dispatch(setProducts(data));
-		} catch (error) {
-			console.log('checkout Error', error);
-		}
-	};
-};
-
-/*
- Reducer
- */
-
-export default function cartReducer(state = initialState, action) {
-	switch (action.type) {
-		case SET_PRODUCTS:
-			return action.product;
-		case UPDATE_CART:
-			return state.map((product) => {
-				return product.id === action.product.id ? action.product : product;
-			});
-		default:
-			return state;
+export const fetchCart = createAsyncThunk(
+  '/cart/fetch',
+  async () => {
+    const token = window.localStorage.getItem(TOKEN)
+    const { data } = await axios.get(`/api/users/cart`, { headers: { authorization: token }});
+    return data
 	}
+)
+
+export const addToCart = createAsyncThunk(
+  '/cart/add',
+  async (productId) => {
+    const token = window.localStorage.getItem(TOKEN);
+    await axios.put(`/api/users/cart/add/${productId}`, { headers: { authorization: token }});
+  }
+)
+
+export const removeFromCart = createAsyncThunk(
+  '/cart/remove',
+  async (productId) => {
+    const token = window.localStorage.getItem(TOKEN);
+    await axios.put(`/api/users/cart/remove/${productId}`, { headers: { authorization: token }});
+    fetchCart()
+  }
+)
+
+export const updateProductQty = createAsyncThunk(
+  '/cart/update',
+  async ({productId, qty}) => {
+    const token = window.localStorage.getItem(TOKEN);
+    await axios.put(`/api/users/cart/${productId}/update`, { headers: { authorization: token }, qty});
+  }
+)
+
+export const fetchCheckout = createAsyncThunk(
+  '/cart/checkout',
+  async () => {
+    const token = window.localStorage.getItem(TOKEN);
+    await axios.put(`/api/users/cart/checkout`, { headers: { authorization: token }});
+    fetchCart()
+  }
+)
+
+const initialState = {
+  products: [],
+  amount: 0
 }
+
+export const cartSlice = createSlice({
+  name: 'cart',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase (fetchCart.fulfilled, (state, action) => {
+      const products = action.payload
+      const amount = action.payload.length
+      return {products, amount}
+    })
+  },
+})
+
+export default cartSlice.reducer

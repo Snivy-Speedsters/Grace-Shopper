@@ -1,19 +1,17 @@
-import React, { Component, useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { me } from "../store/auth";
 import { Link } from "react-router-dom";
 
-const OrderHistory = (props) => {
-  const { pastOrders } = props;
+const OrderHistory = () => {
 
-  const [products, setProducts] = useState([]);
+  const pastOrders = useSelector((state) => state.auth.pastOrders)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setProducts(pastOrders);
+    dispatch(me());
   }, []);
-
-  useEffect(() => {
-    setProducts(pastOrders);
-  }, [pastOrders]);
 
   let addedProducts = pastOrders.length ? (
     pastOrders.map((product) => {
@@ -46,12 +44,4 @@ const OrderHistory = (props) => {
   );
 };
 
-const mapState = (state) => ({
-  pastOrders: state.auth.pastOrders,
-});
-
-const mapDispatch = (dispatch) => ({
-  //getOrderHistory: () => dispatch(fetchOrderHistory()),
-});
-
-export default connect(mapState, mapDispatch)(OrderHistory);
+export default OrderHistory

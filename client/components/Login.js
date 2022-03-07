@@ -1,40 +1,32 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signUp } from "../store/auth";
+import { login, me } from "../store/auth";
+import { useHistory } from "react-router-dom";
 
-const SignUp = () => {
+const Login = () => {
+  const name = 'login'
+  const displayName = 'Login'
   const error = useSelector((state) => state.auth.error)
 
+  const history = useHistory()
   const dispatch = useDispatch()
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault()
     const user = {
       method: evt.target.name,
       email: evt.target.email.value,
       password: evt.target.password.value,
-      firstName: evt.target.firstName.value,
-      lastName: evt.target.lastName.value
     }
-    dispatch(signUp(user))
+    dispatch(login(user))
+    .then(() => {dispatch(me())})
+    .then(() => {history.push('/home')})
   }
+
 
   return (
     <div>
-      <form onSubmit={handleSubmit} name={"signup"}>
-        <h1>welcome please fill out the information below</h1>
-        <div>
-          <label htmlFor="firstName">
-            <small>first Name</small>
-          </label>
-          <input name="firstName" type="text" />
-        </div>
-        <div>
-          <label htmlFor="lastName">
-            <small>last Name</small>
-          </label>
-          <input name="lastName" type="text" />
-        </div>
+      <form onSubmit={handleSubmit} name={name}>
         <div>
           <label htmlFor="email">
             <small>email</small>
@@ -48,7 +40,7 @@ const SignUp = () => {
           <input name="password" type="password" />
         </div>
         <div>
-          <button type="submit">Sign up</button>
+          <button type="submit">{displayName}</button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
@@ -56,4 +48,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp
+export default Login

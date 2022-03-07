@@ -74,7 +74,7 @@ router.put('/cart/checkout', requireToken, async (req, res, next) => {
 		next(err);
 	}
 });
-	
+
 router.put("/cart/add/:productId", requireToken, async (req, res, next) => {
   try {
     const productId = req.params.productId;

@@ -1,26 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { fetchUsers } from '../../store/allUsers'
-import {connect} from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import UserCard from './UserCard'
 
 
-export const AllUsers = props => {
-  const { allUsers, fetchUsers } = props
-  const [users, setUsers] = useState([])
+export const AllUsers = () => {
 
-  const fetchData = async () => {
-    await fetchUsers()
-  }
+  const users = useSelector((state) => state.users)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    fetchData()
-    setUsers(allUsers)
+    dispatch(fetchUsers())
   }, [])
-
-  useEffect(() => {
-      setUsers(allUsers)
-  }, [allUsers])
-
 
   return (
     <div>
@@ -33,13 +24,4 @@ export const AllUsers = props => {
   )
 }
 
-
-const mapState = state => ({
-  allUsers: state.allUsers
-})
-
-const mapDispatch = dispatch => ({
-  fetchUsers: () => dispatch(fetchUsers())
-})
-
-export default connect(mapState, mapDispatch)(AllUsers)
+export default AllUsers
