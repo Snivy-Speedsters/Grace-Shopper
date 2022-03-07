@@ -35,7 +35,6 @@ export const login = createAsyncThunk(
     try {
       const res = await axios.post(`/auth/${user.method}`, user);
       window.localStorage.setItem(TOKEN, res.data.token);
-      history.push("/")
       me()
     } catch (authError) {
       return dispatch({error: authError});
@@ -43,15 +42,10 @@ export const login = createAsyncThunk(
   }
 )
 
-export const logOut = createAsyncThunk(
-
-)
-
-
-
+const initialState = {}
 export const authSlice = createSlice({
   name: 'auth',
-  initialState: {},
+  initialState,
   reducers: {
     setError: (state, action) => {
       return action.payload
@@ -59,14 +53,16 @@ export const authSlice = createSlice({
     logOut: () => {
       window.localStorage.removeItem(TOKEN);
       history.push("/login");
-      return {}
-    }
+      return initialState
+    },
   },
-  extraReducers: (builder) => {
-    builder.addCase(me.fulfilled, (state, action) => {
-      return action.payload
+  extraReducers(builder){
+    builder.addCase(me.fulfilled, (state, { payload }) => {
+      return payload
     })
   }
 })
+
+export const { logOut } = authSlice.actions
 
 export default authSlice.reducer

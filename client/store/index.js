@@ -29,9 +29,13 @@ export * from "./auth";
 
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from './auth'
+import cartReducer from './cart'
+import productsReducer from './products'
 
 export default configureStore({
   reducer: {
-    auth: authReducer
+    auth: authReducer,
+    cart: cartReducer,
+    products: productsReducer
   },
 })

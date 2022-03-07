@@ -1,41 +1,28 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from '../store/products';
 import { ProductCard } from './Cards/ProductCard'
 
 
-export const AllProducts = props => {
+export const AllProducts = () => {
 
-	// Deconstruct state and dispatch that was mapped to props
-	const { allProducts, getProducts } = props
+	const products = useSelector((state) => state.products)
+	const dispatch = useDispatch()
 
 	// Executes when component first loads
 	useEffect(() => {
-		getProducts()
+		dispatch(fetchProducts())
 	}, [])
 
 
 	return (
 	<div>
 		<h1>All Buddies</h1>
-		{!allProducts.length ? <h3>No Products</h3> :
-			allProducts.map(product => (<ProductCard product={product} key={product.id}/>))
+		{!products ? <h3>No Products</h3> :
+			products.map(product => (<ProductCard product={product} key={product.id}/>))
 		}
 	</div>
   )
 }
 
-
-const mapState = (state) => {
-	return {
-		allProducts: state.products,
-	};
-};
-
-const mapDispatch = (dispatch) => {
-	return {
-		getProducts: () => dispatch(fetchProducts()),
-	};
-};
-
-export default connect(mapState, mapDispatch)(AllProducts);
+export default AllProducts;

@@ -15,11 +15,6 @@
 // import SingleProductAdd from './components/Admin/SingleProductAdd';
 
 
-// class Routes extends Component {
-//   componentDidMount() {
-//     // this.props.loadInitialData();
-//   }
-
 //   render() {
 //     // const { isLoggedIn, isAdmin } = this.props;
 
@@ -83,27 +78,45 @@ import { me } from "./store/auth";
 import Home from "./components/Home"
 import Login  from "./components/Login";
 import Signup from "./components/SignUp";
+import AllProducts from "./components/AllProducts";
+import SingleProduct from "./components/SingleProduct";
+import Cart from "./components/CartView";
+import Admin from "./components/Admin/Admin";
+import SingleProductEdit from "./components/Admin/SingleProductEdit";
+import OrderHistory from "./components/OrderHistory";
+import SingleProductAdd from './components/Admin/SingleProductAdd';
 
-const Routes = props => {
-  const isLoggedIn = !!(useSelector((state) => state.auth.id))
+import { fetchCart } from "./store/cart";
+
+function Routes(){
+  const auth = (useSelector((state) => state.auth))
   const dispatch = useDispatch()
 
-  useEffect( ()=>{
+  useEffect(()=>{
     dispatch(me())
-  })
+    dispatch(fetchCart())
+  }, [])
 
   return(
     <div>
-      {isLoggedIn ? (
-					<Switch>
-						<Route path="/home" component={Home} />
-            <Redirect to="/home" />
-          </Switch>
+      {!auth.id ? (
+          <Switch>
+          <Route path="/" exact component={Login} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+        </Switch>
         ) : (
           <Switch>
-            <Route path="/" exact component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
+            <Route path="/home" component={Home} />
+            <Route path="/products" exact component={AllProducts} />
+						<Route path="/products/:productId" component={SingleProduct} />
+						<Route path="/cart" component={Cart} />
+            <Route path="/orderHistory" component={OrderHistory} />
+						{auth.administrator ? (<Route path="/admin/products/add" exact component={SingleProductAdd} />):(<></>)}
+						{auth.administrator ? (<Route path="/admin/products/:productId" component={SingleProductEdit} />):(<></>)}
+						{auth.administrator ? (<Route path="/admin" exact component={Admin} />) : (<></>)}
+            <Route path="/admin" component={Admin} />
+            <Redirect to="/home" />
           </Switch>
         )}
     </div>
@@ -111,8 +124,3 @@ const Routes = props => {
 }
 
 export default withRouter(Routes)
-
-
-
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjEsImlhdCI6MTY0NjM1NTg2OX0.P6pJP3a_v1M1zKAdKTCsN1u1mw4eiIoxI0tLivGlhNc

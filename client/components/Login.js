@@ -9,7 +9,7 @@ const Login = () => {
 
   const dispatch = useDispatch()
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault()
     const user = {
       method: evt.target.name,

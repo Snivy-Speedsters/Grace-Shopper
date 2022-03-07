@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logout } from '../store';
-import { fetchCartProducts } from '../store/cart';
+import { fetchCart } from '../store/cart';
+import { logOut } from '../store/auth';
 
 
-const Navbar = props => {
-	const { handleClick, isLoggedIn, isAdmin, getCart, currentCart } = props
-
-	const [cart, setCart] = useState([])
-
-	useEffect(() => {
-		getCart()
-	}, [])
+const Navbar = () => {
+	const isLoggedIn = !!(useSelector((state) => state.auth.id))
+	const dispatch = useDispatch()
+	const cartAmount = useSelector((state) => state.cart.amount)
+	const isAdmin = useSelector((state) => state.auth.administrator)
 
 	useEffect(() => {
-		setCart(currentCart)
-	}, [currentCart])
+		dispatch(fetchCart())
+	}, [window.localStorage.getItem('token')])
 
 return(
 	<div>
@@ -30,11 +27,11 @@ return(
 					<Link to="/cart">View Cart</Link>
 					{isAdmin ? <Link to="/admin">Admin</Link> : <></>}
 
-					<a href="#" onClick={handleClick}>
+					<a href="#" onClick={() => {dispatch(logOut())}}>
 						Logout
 					</a>
 
-					<span>Cart: {cart.length}</span>
+					<span>Cart: {cartAmount}</span>
 				</div>
 			) : (
 				<div>
@@ -49,19 +46,4 @@ return(
 	</div>
 )}
 
-const mapState = (state) => {
-	return {
-		isLoggedIn: !!state.auth.id,
-		isAdmin: state.auth.administrator,
-		currentCart: state.cart
-	};
-};
-
-const mapDispatch = (dispatch) => {
-	return {
-		handleClick() { dispatch(logout()) },
-		getCart: () => dispatch(fetchCartProducts())
-	};
-};
-
-export default connect(mapState, mapDispatch)(Navbar);
+export default Navbar
