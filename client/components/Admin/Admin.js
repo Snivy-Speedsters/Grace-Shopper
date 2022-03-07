@@ -19,8 +19,6 @@ export const Admin = () => {
     }
   }
 
-  console.log('here')
-
   return (
     <div>
       <h3>Hello, admin {firstName}</h3>
