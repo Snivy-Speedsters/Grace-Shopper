@@ -12,6 +12,7 @@ import Admin from "./components/Admin/Admin";
 import SingleProductEdit from "./components/Admin/SingleProductEdit";
 import OrderHistory from "./components/OrderHistory";
 import SingleProductAdd from './components/Admin/SingleProductAdd';
+import Profile from "./components/User/Profile";
 
 import { fetchCart } from "./store/cart";
 
@@ -39,6 +40,7 @@ function Routes(){
 						<Route path="/products/:productId" component={SingleProduct} />
 						<Route path="/cart" component={Cart} />
             <Route path="/orderHistory" component={OrderHistory} />
+            <Route path="/profile" component={Profile} />
 						{auth.administrator ? (<Route path="/admin/products/add" exact component={SingleProductAdd} />):(<></>)}
 						{auth.administrator ? (<Route path="/admin/products/:productId" component={SingleProductEdit} />):(<></>)}
 						{auth.administrator ? (<Route path="/admin" exact component={Admin} />) : (<></>)}

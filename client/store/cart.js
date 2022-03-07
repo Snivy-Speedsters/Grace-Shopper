@@ -25,7 +25,6 @@ export const removeFromCart = createAsyncThunk(
   async (productId) => {
     const token = window.localStorage.getItem(TOKEN);
     await axios.put(`/api/users/cart/remove/${productId}`, { headers: { authorization: token }});
-    fetchCart()
   }
 )
 
@@ -42,7 +41,6 @@ export const fetchCheckout = createAsyncThunk(
   async () => {
     const token = window.localStorage.getItem(TOKEN);
     await axios.put(`/api/users/cart/checkout`, { headers: { authorization: token }});
-    fetchCart()
   }
 )
 

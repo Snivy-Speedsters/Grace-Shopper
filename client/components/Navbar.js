@@ -25,6 +25,7 @@ return(
 					<Link to="/home">Home</Link>
 					<Link to="/products">All Buddies</Link>
 					<Link to="/cart">View Cart</Link>
+					<Link to="/profile">Profile</Link>
 					{isAdmin ? <Link to="/admin">Admin</Link> : <></>}
 
 					<a href="#" onClick={() => {dispatch(logOut())}}>
