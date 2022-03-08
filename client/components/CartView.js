@@ -2,10 +2,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import ProductCheckoutCard from './Cards/ProductCheckoutCard';
-import { makePayment } from './Checkout/makePayment';
+import MakePayment from	'./Checkout/MakePayment'
 
 export const Cart = () => {
 	const cart = useSelector((state) => state.cart.products);
+	const loggedIn = useSelector((state) => state.auth.id)
 
 	const history = useHistory();
 
@@ -19,14 +20,9 @@ export const Cart = () => {
 					<ProductCheckoutCard product={product} key={product.id} />
 				))
 			)}
-			{makePayment()}
-			<button
-				onClick={() => {
-					history.push('/orderHistory');
-				}}
-			>
-				Previous Orders
-			</button>
+			{loggedIn ? <button onClick={() => {history.push('/orderHistory')}}> Previous Orders </button>:
+			<button onClick={() => {history.push('/login')}}>Login to Checkout</button>}
+			{loggedIn ? <MakePayment /> : <></>}
 		</div>
 	);
 };
