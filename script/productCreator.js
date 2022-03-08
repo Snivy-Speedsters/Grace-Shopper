@@ -14,6 +14,7 @@ function createProduct(index) {
     name,
     price,
     imageUrl,
+    gender
   };
 }
 

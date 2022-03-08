@@ -5,6 +5,7 @@ const Product = db.define('product', {
 	name: Sequelize.STRING,
 	price: Sequelize.DECIMAL(10, 2),
 	imageUrl: Sequelize.STRING,
+	gender: Sequelize.STRING
 });
 
 module.exports = Product;
