@@ -12,7 +12,8 @@ import Admin from './components/Admin/Admin';
 import SingleProductEdit from './components/Admin/SingleProductEdit';
 import OrderHistory from './components/OrderHistory';
 import SingleProductAdd from './components/Admin/SingleProductAdd';
-import Profile from "./components/User/Profile";
+import Profile from './components/User/Profile';
+import { confirmationPage } from './components/Checkout/confirmationPage';
 
 import { fetchCart } from './store/cart';
 import { makePayment } from './components/Checkout/makePayment';
@@ -33,6 +34,7 @@ function Routes() {
 					<Route path="/" exact component={Login} />
 					<Route path="/login" component={Login} />
 					<Route path="/signup" component={Signup} />
+					<Route path="/confirmation" component={confirmationPage} />
 				</Switch>
 			) : (
 				<Switch>
@@ -43,12 +45,29 @@ function Routes() {
 					<Route path="/payment" component={makePayment} />
 					<Route path="/orderHistory" component={OrderHistory} />
 					<Route path="/profile" component={Profile} />
-					{auth.administrator ?
-						(<Route path="/admin/products/add" exact component={SingleProductAdd} />):(<></>)}
-					{auth.administrator ?
-						(<Route path="/admin/products/:productId" component={SingleProductEdit} />):(<></>)}
+					<Route path="/confirmation" component={confirmationPage} />
 					{auth.administrator ? (
-						<Route path="/admin" exact component={Admin} />):(<></>)}
+						<Route
+							path="/admin/products/add"
+							exact
+							component={SingleProductAdd}
+						/>
+					) : (
+						<></>
+					)}
+					{auth.administrator ? (
+						<Route
+							path="/admin/products/:productId"
+							component={SingleProductEdit}
+						/>
+					) : (
+						<></>
+					)}
+					{auth.administrator ? (
+						<Route path="/admin" exact component={Admin} />
+					) : (
+						<></>
+					)}
 					<Redirect to="/home" />
 				</Switch>
 			)}

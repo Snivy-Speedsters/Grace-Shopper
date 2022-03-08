@@ -38,7 +38,7 @@ export const makePayment = () => {
 						dispatch(fetchCart());
 					})
 					.then(() => {
-						history.push('/home');
+						history.push('/confirmation');
 					});
 			})
 			.catch((error) => console.log(error));
