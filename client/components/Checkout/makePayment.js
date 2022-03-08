@@ -33,9 +33,9 @@ export const makePayment = () => {
 			body: JSON.stringify(body),
 		})
 			.then(() => {
-				dispatch(fetchCheckout());
-				dispatch(fetchCart());
-				history.push('/');
+				dispatch(fetchCheckout())
+				.then(() => {dispatch(fetchCart())})
+				.then(() => {history.push('/')})
 			})
 			.catch((error) => console.log(error));
 	};
@@ -44,10 +44,10 @@ export const makePayment = () => {
 		<StripeCheckout
 			stripeKey="pk_test_51KajEaGJWhSw6KvjEOgLGKYpDIIfQ5j9BmjwsaKbbP81UCn9v9mRZ8YktsK7QeMmYIpqhEtSULNpP8DC28lg4a1e008qZTaRr1"
 			token={paymentToken}
-			name="Buy Buddy"
+			name="Rent Buddy"
 			amount={totalAmount * 100}
 		>
-			<button>Buy Buddy for ${totalAmount}</button>
+			<button>Rent Buddy for ${totalAmount}</button>
 		</StripeCheckout>
 	);
 };

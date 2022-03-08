@@ -1,13 +1,13 @@
 const router = require('express').Router();
 const {
-	models: { Product },
+	models: { Product, Tag },
 } = require('../db');
 module.exports = router;
 
 // /api/products
 router.get('/', async (req, res, next) => {
 	try {
-		const products = await Product.findAll();
+		const products = await Product.findAll({include: Tag});
 		res.json(products);
 	} catch (err) {
 		next(err);
