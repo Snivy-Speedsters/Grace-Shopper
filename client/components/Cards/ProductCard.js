@@ -1,17 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  Card,
-  Box,
-  CardContent,
-  Typography,
-  CardActions,
-  Button,
-  CardMedia,
-} from "@material-ui/core";
+import { Card, Box, CardContent, Typography, CardActions, Button, CardMedia} from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { addToCart, fetchCart } from "../../store/cart";
+import { fetchSingleProduct } from "../../store/singleProduct"
 
 export const ProductCard = (props) => {
   const { imageUrl, name, price, id } = props.product;
@@ -21,12 +14,8 @@ export const ProductCard = (props) => {
 
   const handleAdd = () => {
     dispatch(addToCart(id))
-      .then(() => {
-        dispatch(fetchCart());
-      })
-      .then(() => {
-        history.push("/products");
-      });
+    .then(() => {dispatch(fetchCart());})
+    .then(() => {history.push("/products");});
   };
 
   return (

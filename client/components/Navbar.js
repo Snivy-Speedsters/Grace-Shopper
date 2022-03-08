@@ -36,7 +36,7 @@ const Navbar = () => {
               Logout
             </a>
 
-            <a>cart : {cartAmount}</a>
+            <span>Cart: {cartAmount}</span>
           </div>
         ) : (
           <div>
@@ -44,6 +44,7 @@ const Navbar = () => {
             <Link to="/login">Login</Link>
             <Link to="/signup">Sign Up</Link>
             <Link to="/products">All Products</Link>
+            <Link to="/cart">View Cart</Link>
           </div>
         )}
       </nav>
