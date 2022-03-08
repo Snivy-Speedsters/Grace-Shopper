@@ -34,8 +34,12 @@ export const makePayment = () => {
 		})
 			.then(() => {
 				dispatch(fetchCheckout())
-				.then(() => {dispatch(fetchCart())})
-				.then(() => {history.push('/')})
+					.then(() => {
+						dispatch(fetchCart());
+					})
+					.then(() => {
+						history.push('/home');
+					});
 			})
 			.catch((error) => console.log(error));
 	};
