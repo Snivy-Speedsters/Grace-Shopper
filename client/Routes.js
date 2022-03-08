@@ -42,28 +42,19 @@ function Routes() {
 					<Route path="/cart" component={Cart} />
 					<Route path="/payment" component={makePayment} />
 					<Route path="/orderHistory" component={OrderHistory} />
+					<Route path="/profile" component={Profile} />
+					{auth.administrator ?
+						(<Route path="/admin/products/add" exact component={SingleProductAdd} />):
+						( <></> )
+					}
+					{auth.administrator ?
+						(<Route path="/admin/products/:productId" component={SingleProductEdit} />):
+						( <></> )
+					}
 					{auth.administrator ? (
-						<Route
-							path="/admin/products/add"
-							exact
-							component={SingleProductAdd}
-						/>
-					) : (
-						<></>
-					)}
-					{auth.administrator ? (
-						<Route
-							path="/admin/products/:productId"
-							component={SingleProductEdit}
-						/>
-					) : (
-						<></>
-					)}
-					{auth.administrator ? (
-						<Route path="/admin" exact component={Admin} />
-					) : (
-						<></>
-					)}
+						<Route path="/admin" exact component={Admin} />):
+						( <></> )
+					}
 					<Redirect to="/home" />
 				</Switch>
 			)}
