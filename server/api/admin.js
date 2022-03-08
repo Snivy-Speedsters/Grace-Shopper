@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {
-	models: { User, Product },
+	models: { User, Product, Order },
 } = require('../db');
 module.exports = router;
 
@@ -23,6 +23,20 @@ router.get("/users", requireToken, async (req, res, next) => {
       })
 
       res.send(users)
+    } catch(error) {
+      next(error)
+      }
+    } else {
+      res.send('not authenticated')
+  }
+})
+
+router.get("/orders", requireToken, async (req, res, next) => {
+  if(req.user.administrator){
+    try{
+      const orders = await Order.findAll()
+
+      res.send(orders)
     } catch(error) {
       next(error)
       }

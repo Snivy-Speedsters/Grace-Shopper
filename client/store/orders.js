@@ -12,6 +12,15 @@ export const fetchOrders = createAsyncThunk(
 	}
 )
 
+export const fetchAllOrders = createAsyncThunk(
+  '/admin/orders',
+  async () => {
+    const token = window.localStorage.getItem(TOKEN)
+    const { data } = await axios.get("/api/admin/orders", { headers: { authorization: token }});
+    return data
+	}
+)
+
 
 export const ordersSlice = createSlice({
   name: 'orders',
@@ -19,6 +28,9 @@ export const ordersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase (fetchOrders.fulfilled, (state, action) => {
+      return action.payload
+    }),
+    builder.addCase (fetchAllOrders.fulfilled, (state, action) => {
       return action.payload
     })
   }
