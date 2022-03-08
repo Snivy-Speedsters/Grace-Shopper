@@ -98,18 +98,48 @@ router.put("/cart/add/all", requireToken, async (req, res, next) => {
   }
 });
 
+router.put("/cart/add/all", requireToken, async (req, res, next) => {
+  try {
+    const { products } = req.body
+    const { user } = req;
+
+		for(let i = 0; i < products.length; i++){
+			await user.addProduct(products[i].id)
+		}
+    res.send('added');
+  } catch (err) {
+    next(err);
+  }
+
+});
+
 router.put("/cart/add/:productId", requireToken, async (req, res, next) => {
   try {
     const productId = req.params.productId;
     const { user } = req;
 
-    const product = await Product.findByPk(productId);
-    await user.addProduct(product);
-    user.products = [...user.products, product];
-    res.send(user.products);
+		const product = await Product.findByPk(productId);
+		await user.addProduct(product);
+		user.products = [...user.products, product];
+		res.send(user.products);
+	} catch (err) {
+		next(err);
+	}
+});
+
+router.put("/cart/remove/all", requireToken, async (req, res, next) => {
+  try {
+    const { products } = req.body
+    const { user } = req;
+
+		for(let i = 0; i < products.length; i++){
+			await user.removeProduct(products[i].id)
+		}
+    res.send('removed');
   } catch (err) {
     next(err);
   }
+
 });
 
 router.put("/cart/remove/all", requireToken, async (req, res, next) => {
