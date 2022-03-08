@@ -36,7 +36,7 @@ const Navbar = () => {
               Logout
             </a>
 
-            <a>cart : {cartAmount}</a>
+            <span>Cart: {cartAmount}</span>
           </div>
         ) : (
           <div>
