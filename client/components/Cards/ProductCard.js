@@ -37,7 +37,6 @@ export const ProductCard = (props) => {
           variant="outlined"
           style={{ backgroundColor: "grey" }}
         >
-          {/* <img src={imageUrl} /> */}
           <CardMedia
             style={{ paddingTop: "5%" }}
             image={imageUrl}
