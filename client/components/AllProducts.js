@@ -39,7 +39,7 @@ export const AllProducts = () => {
       filteredProducts = filteredProducts.map(product => <ProductCard product={product} key={product.id} />)
     }
 
-    return filteredProducts
+    return filteredProducts.sort((a, b) => {return a.id - b.id})
   }
 
   return (
