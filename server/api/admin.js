@@ -45,6 +45,22 @@ router.get("/orders", requireToken, async (req, res, next) => {
   }
 })
 
+router.put("/order/:orderId/complete", requireToken, async (req, res, next) => {
+  if(req.user.administrator){
+    try{
+      const { orderId } = req.params
+      const order = await Order.findByPk(orderId)
+
+      await order.update({complete: true})
+      res.send(order)
+    } catch(error) {
+      next(error)
+      }
+    } else {
+      res.send('not authenticated')
+  }
+})
+
 router.post("/products", requireToken, async (req, res, next) => {
   if(req.user.administrator){
     try{

@@ -21,6 +21,15 @@ export const fetchAllOrders = createAsyncThunk(
 	}
 )
 
+export const completeOrder = createAsyncThunk(
+  '/admin/order/complete',
+  async (orderId, { dispatch }) => {
+    const token = window.localStorage.getItem(TOKEN)
+    await axios.put(`/api/admin/order/${orderId}/complete`, { headers: { authorization: token }});
+    dispatch(fetchAllOrders())
+	}
+)
+
 
 export const ordersSlice = createSlice({
   name: 'orders',
