@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchCart } from "../store/cart";
 import { logOut } from "../store/auth";
-import { ShoppingCartIcon } from "@material-ui/icons";
-import { Icon } from "@material-ui/core";
 
 const Navbar = () => {
   const isLoggedIn = !!useSelector((state) => state.auth.id);
@@ -38,7 +36,7 @@ const Navbar = () => {
               Logout
             </a>
 
-            <a>cart: {cartAmount}</a>
+            <a>cart : {cartAmount}</a>
           </div>
         ) : (
           <div>

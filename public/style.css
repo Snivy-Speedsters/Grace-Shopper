@@ -36,6 +36,7 @@ form div {
   width: 500px;
   height: 800px;
   border: 10px;
+  
 }
 .product-container {
   flex-wrap: wrap;
