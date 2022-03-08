@@ -1,5 +1,5 @@
-const maleTags = ['Father', 'Brother', 'Ex-Boyfriend', 'Boyfriend', 'Friend', 'Coworker', 'Archnemesis']
-const femaleTags = ['Mother', 'Sister', 'Ex-Girlfriend', 'Girlfriend', 'Friend', 'Coworker', 'Archnemesis']
+const maleTags = ['father', 'brother', 'ex-boyfriend', 'boyfriend', 'friend', 'coworker', 'archnemesis']
+const femaleTags = ['mother', 'sister', 'ex-girlfriend', 'girlfriend', 'friend', 'coworker', 'archnemesis']
 
 const createTag = (product) => {
 

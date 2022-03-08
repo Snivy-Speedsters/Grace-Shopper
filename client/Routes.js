@@ -44,17 +44,11 @@ function Routes() {
 					<Route path="/orderHistory" component={OrderHistory} />
 					<Route path="/profile" component={Profile} />
 					{auth.administrator ?
-						(<Route path="/admin/products/add" exact component={SingleProductAdd} />):
-						( <></> )
-					}
+						(<Route path="/admin/products/add" exact component={SingleProductAdd} />):(<></>)}
 					{auth.administrator ?
-						(<Route path="/admin/products/:productId" component={SingleProductEdit} />):
-						( <></> )
-					}
+						(<Route path="/admin/products/:productId" component={SingleProductEdit} />):(<></>)}
 					{auth.administrator ? (
-						<Route path="/admin" exact component={Admin} />):
-						( <></> )
-					}
+						<Route path="/admin" exact component={Admin} />):(<></>)}
 					<Redirect to="/home" />
 				</Switch>
 			)}

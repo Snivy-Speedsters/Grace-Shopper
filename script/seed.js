@@ -20,10 +20,10 @@ const userSeed = async () => {
 const productSeed = async () => {
   for(let i = 0; i < productAmount; i++){
     const product = createProduct(i + 1)
-    const tags = createTag(product)
+    const productTags = createTag(product)
 
     await Product.create(product)
-    .then(() => tagTableSeed((i + 1), tags))
+    .then(() => tagTableSeed((i + 1), productTags))
 
     if((Math.floor(Math.random() * 10)) < 5){
       productIds.push(i + 1)
@@ -60,10 +60,9 @@ const cartSeed = async () => {
   }
 }
 
-const tagTableSeed = async (productId, tags) => {
-  for(let i = 0; i < tags.length; i++){
-    let tagId = (tags.indexOf(tags[i]) + 1)
-    // console.log(productId, tagId)
+const tagTableSeed = async (productId, productTags) => {
+  for(let i = 0; i < productTags.length; i++){
+    let tagId = (tags.indexOf(productTags[i]) + 1)
     await TagTable.create({productId, tagId})
   }
 }
