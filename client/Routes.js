@@ -33,6 +33,9 @@ function Routes() {
 					<Route path="/" exact component={Login} />
 					<Route path="/login" component={Login} />
 					<Route path="/signup" component={Signup} />
+					<Route path="/cart" component={Cart} />
+					<Route path="/products" exact component={AllProducts} />
+					<Route path="/products/:productId" component={SingleProduct} />
 				</Switch>
 			) : (
 				<Switch>

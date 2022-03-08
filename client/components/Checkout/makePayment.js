@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import StripeCheckout from 'react-stripe-checkout';
 import { fetchCart, fetchCheckout } from '../../store/cart';
 
-export const makePayment = () => {
+export const MakePayment = () => {
 	const cart = useSelector((state) => state.cart.products);
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -51,3 +51,5 @@ export const makePayment = () => {
 		</StripeCheckout>
 	);
 };
+
+export default MakePayment
