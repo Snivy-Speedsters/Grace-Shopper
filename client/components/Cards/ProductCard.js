@@ -20,13 +20,12 @@ export const ProductCard = (props) => {
 
   return (
     <div>
-      <Box>
+      <Box boxShadow={3} spacing={3} style={{ padding: 10 }}>
         <Card
           className="mdc-card mdc-card--outlined product"
           variant="outlined"
           style={{ backgroundColor: "grey" }}
         >
-          {/* <img src={imageUrl} /> */}
           <CardMedia
             style={{ paddingTop: "5%" }}
             image={imageUrl}

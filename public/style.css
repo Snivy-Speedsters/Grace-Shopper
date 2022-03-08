@@ -33,9 +33,10 @@ form div {
 
 .product {
   margin: 10px;
-  width: 400px;
-  height: 600px;
+  width: 500px;
+  height: 800px;
   border: 10px;
+  
 }
 .product-container {
   flex-wrap: wrap;
