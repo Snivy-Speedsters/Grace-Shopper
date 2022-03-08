@@ -13,7 +13,7 @@ export const makePayment = () => {
 	if (cart.length) {
 		totalAmount = cart
 			.map((product) => {
-				return parseInt(product.price);
+				return parseInt(product.price * product.cart.qty);
 			})
 			.reduce((prev, cur) => (prev += cur));
 	}
