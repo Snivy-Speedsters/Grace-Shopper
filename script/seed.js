@@ -6,8 +6,8 @@ const createProduct = require('./productCreator')
 const { createTag, maleTags, femaleTags } = require('./tagCreator')
 
 // Change number to the desired amount of users and products to be generated
-const userAmount = 20
-const productAmount = 20
+const userAmount = 60
+const productAmount = 60
 const productIds = []
 const tags = []
 
