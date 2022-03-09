@@ -168,3 +168,14 @@ router.put("/cart/remove/:productId", requireToken, async (req, res, next) => {
     next(err);
   }
 });
+
+router.get('/orders/', requireToken, async (req, res, next) => {
+	try {
+    const userId = req.user.id;
+
+		const orders = await Order.findAll({where:{userId}})
+		res.send(orders)
+  } catch (err) {
+    next(err);
+  }
+})

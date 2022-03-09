@@ -14,10 +14,21 @@ router.get('/', async (req, res, next) => {
 	}
 });
 
+router.get('/tags', async (req, res, next) => {
+	try {
+		const tags = await Tag.findAll();
+		res.json(tags);
+	} catch (err) {
+		next(err);
+	}
+});
+
 // /api/products/:id
 router.get('/:id', async (req, res, next) => {
 	try {
-		const product = await Product.findByPk(req.params.id);
+		const product = await Product.findByPk(req.params.id, {include: Tag});
+		console.log(product)
+
 		res.json(product);
 	} catch (err) {
 		next(err);

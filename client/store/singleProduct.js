@@ -37,7 +37,7 @@ export const createSingleProduct = createAsyncThunk(
   }
 )
 
-const initialState = {}
+const initialState = {tags:[]}
 
 export const singleProductSlice = createSlice({
   name: 'singleProduct',

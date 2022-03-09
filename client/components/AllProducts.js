@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../store/products";
 import { ProductCard } from "./Cards/ProductCard";
 import AllProductsFilter from "./AllProductsFilter";
+import { Container, Box, Grid } from "@mui/material";
 
 export const AllProducts = () => {
   const products = useSelector((state) => state.products);
@@ -34,22 +35,22 @@ export const AllProducts = () => {
     }
 
     if(gender !== ''){
-      filteredProducts = filteredProducts.map(product => {if(product.gender === gender){return <ProductCard product={product} key={product.id} />}})
-    } else {
-      filteredProducts = filteredProducts.map(product => <ProductCard product={product} key={product.id} />)
+      filteredProducts = filteredProducts.filter(product => product.gender === gender)
     }
+    filteredProducts.sort((a, b) => {return a.id - b.id})
 
-    return filteredProducts.sort((a, b) => {return a.id - b.id})
+    return filteredProducts.map(product => <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}><ProductCard product={product} /></Grid>)
   }
 
   return (
-    <div>
-      <h1>All Buddies</h1>
-      <AllProductsFilter />
-      <div className="product-container">
-        {!products ? <h3>No Products</h3> : filterProducts(products)}
-      </div>
-    </div>
+    <Container>
+        <AllProductsFilter />
+        {!products ? <h3>No Products</h3> :
+          <Grid container spacing={2}>
+            {filterProducts(products)}
+          </Grid>
+        }
+    </Container>
   );
 };
 

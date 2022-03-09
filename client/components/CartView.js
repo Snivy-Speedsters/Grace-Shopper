@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import ProductCheckoutCard from "./Cards/ProductCheckoutCard";
 import MakePayment from "./Checkout/makePayment";
+import { Container, Stack, Item, Button, Typography } from "@mui/material";
 
 export const Cart = () => {
   const cart = useSelector((state) => state.cart.products);
@@ -10,36 +11,26 @@ export const Cart = () => {
 
   const history = useHistory();
 
+  const renderCart = (cart) => {
+    if(cart.length === 0){
+      return (<Typography variant="h4" textAlign="center">Nothing in cart</Typography>)
+    } else {
+      return cart.map(product => <ProductCheckoutCard key={product.id} product={product}/>)
+    }
+  }
+
   return (
-    <div>
-      <h3>Current Cart</h3>
-      {!cart.length ? (
-        <h4>No items in cart</h4>
-      ) : (
-        cart.map((product) => (
-          <ProductCheckoutCard product={product} key={product.id} />
-        ))
-      )}
-      {loggedIn ? (
-        <button
-          onClick={() => {
-            history.push("/orderHistory");
-          }}
-        >
-          {" "}
-          Previous Orders{" "}
-        </button>
-      ) : (
-        <button
-          onClick={() => {
-            history.push("/login");
-          }}
-        >
-          Login to Checkout
-        </button>
-      )}
-      {loggedIn ? <MakePayment /> : <></>}
-    </div>
+    <Container>
+      <Stack spacing={2} sx={{mt: 1, mb: 1}}>
+        {renderCart(cart)}
+      </Stack>
+
+
+      {loggedIn ?
+      <></> : <Button onClick={() => {history.push("/login");}}>Login to Checkout</Button>}
+      {loggedIn && cart.length !== 0 ? <MakePayment /> : <></>}
+
+    </Container>
   );
 };
 

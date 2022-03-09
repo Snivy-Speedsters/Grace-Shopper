@@ -1,6 +1,7 @@
 import React from "react";
 import { removeTag } from "../../store/filter";
 import { useDispatch } from "react-redux";
+import { Chip } from "@mui/material";
 
 export const FilterTagCard = (props) => {
   const { tag } = props
@@ -9,10 +10,7 @@ export const FilterTagCard = (props) => {
 
 
   return(
-    <div>
-      <h3>{tag}</h3>
-      <button onClick={() => {dispatch(removeTag(tag))}}>X</button>
-    </div>
+    <Chip label={tag} variant="outlined" onClick={() => {dispatch(removeTag(tag))}}/>
   )
 }
 

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import StripeCheckout from 'react-stripe-checkout';
 import { fetchCart, fetchCheckout } from '../../store/cart';
+import { Button } from '@mui/material';
 
 export const MakePayment = () => {
 	const cart = useSelector((state) => state.cart.products);
@@ -51,7 +52,7 @@ export const MakePayment = () => {
 			name="Rent Buddy"
 			amount={totalAmount * 100}
 		>
-			<button>Rent Buddy for ${totalAmount}</button>
+			<Button variant="contained">Rent Buddy for ${totalAmount}</Button>
 		</StripeCheckout>
 	);
 };

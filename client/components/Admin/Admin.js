@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import AllUsers from './AllUsers'
 import AllProducts from './AllProducts'
+import AllOrders from './AllOrders'
 
 
 export const Admin = () => {
@@ -12,6 +13,8 @@ export const Admin = () => {
     switch(view){
       case 'users':
         return (<AllUsers />)
+      case 'orders':
+        return (<AllOrders />)
       case 'products':
         return (<AllProducts />)
       default:
@@ -24,6 +27,7 @@ export const Admin = () => {
       <h3>Hello, admin {firstName}</h3>
       <button onClick={() => {setAdminView('users')}}>Users</button>
       <button onClick={() => {setAdminView('products')}}>Products</button>
+      <button onClick={() => {setAdminView('orders')}}>Orders</button>
       {currentView(adminView)}
     </div>
   )

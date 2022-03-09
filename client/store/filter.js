@@ -1,8 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from 'axios';
+
+export const fetchTags = createAsyncThunk(
+	'/products/tags',
+	async () => {
+		const { data } = await axios.get(`/api/products/tags`);
+		return data;
+});
 
 const initialState = {
   gender: '',
-  tags: []
+  tags: [],
+  all: []
 }
 
 export const filterSlice = createSlice({
@@ -18,6 +27,11 @@ export const filterSlice = createSlice({
     changeGender: (state, action) => {
       state.gender = action.payload
     }
+  },
+  extraReducers: (builder) => {
+		builder.addCase(fetchTags.fulfilled, (state, action) => {
+			state.all = action.payload
+		})
   }
 })
 

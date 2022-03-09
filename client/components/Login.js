@@ -10,6 +10,7 @@ const Login = () => {
 	const [passwordError, setPasswordError] = useState('')
 
 	const dispatch = useDispatch();
+	const history = useHistory()
 
 	const handleSubmit = (event) => {
     event.preventDefault();
@@ -33,7 +34,7 @@ const Login = () => {
 			return
 		} else {
 			dispatch(login(user))
-			.then(() => {history.pushState('/home')})
+			.then(() => {history.push('/home')})
 		}
   };
 

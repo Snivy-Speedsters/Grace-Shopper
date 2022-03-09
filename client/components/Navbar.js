@@ -38,6 +38,7 @@ const Navbar = () => {
   const handleRoute = (page) => {
     if(page === '/logout'){
       dispatch(logOut())
+      .then(() => {history.push('/')})
     } else {
       history.push(page)
     }
