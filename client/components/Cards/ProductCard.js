@@ -2,7 +2,9 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { addTag } from "../../store/filter";
-import { Card, CardMedia, CardContent, Typography, CardActionArea, Box, Chip } from "@mui/material";
+import { Card, CardMedia, CardContent, Typography, CardActionArea, Box, Chip, IconButton } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import { addToCart, fetchCart } from '../../store/cart'
 
 export const ProductCard = (props) => {
   const { imageUrl, name, id, tags } = props.product;
@@ -11,6 +13,11 @@ export const ProductCard = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const handleAdd = () => {
+    dispatch(addToCart(id))
+    .then(() => {dispatch(fetchCart())})
+  }
 
   return (
     <Card variant="outlined" sx={{maxWidth: 300}}>
@@ -25,6 +32,7 @@ export const ProductCard = (props) => {
           <Typography gutterBottom variant='h5' component='div'>${price}</Typography>
         </CardContent>
         </CardActionArea>
+        <IconButton onClick={() => {handleAdd()}}><AddIcon /></IconButton>
         <Box display='flex'>
           {tags.length === 0 ? <></> :
             tags.map(tag => <Chip key={tag.name} label={tag.name} variant="outlined" onClick={() => {dispatch(addTag(tag.name))}} />)
