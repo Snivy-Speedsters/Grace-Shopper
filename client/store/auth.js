@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-
 import { compareCarts } from "./cart"
 import axios from "axios"
-import history from "../history"
 
 const TOKEN = "token"
 
@@ -24,10 +22,9 @@ export const signUp = createAsyncThunk(
   '/auth/signup',
   async (user, { dispatch }) => {
     try {
-      const res = await axios.post(`/auth/${user.method}`, user);
+      const res = await axios.post(`/auth/signup`, user);
       window.localStorage.setItem(TOKEN, res.data.token);
-      history.push("/")
-      me()
+      dispatch(me())
     } catch (authError) {
       return dispatch({error: authError});
     }
@@ -35,11 +32,12 @@ export const signUp = createAsyncThunk(
 )
 
 export const login = createAsyncThunk(
-  'auth/signin',
+  'auth/login',
   async (user, { dispatch }) => {
     try {
-      const res = await axios.post(`/auth/${user.method}`, user);
+      const res = await axios.post(`/auth/login`, user);
       window.localStorage.setItem(TOKEN, res.data.token);
+      dispatch(me())
     } catch (authError) {
       return dispatch({error: authError});
     }
@@ -67,22 +65,11 @@ export const authSlice = createSlice({
     },
     logOut: () => {
       window.localStorage.removeItem(TOKEN);
-      history.push("/login");
       return initialState
     },
   },
   extraReducers(builder){
     builder.addCase(me.fulfilled, (state, { payload }) => {
-      // const localArray = JSON.parse(window.localStorage.products)
-
-      // if(localArray.length !== 0){
-      //   if(payload.products.length !== 0){
-      //     for(let i = 0; i < payload.products.length)
-      //   }
-      // } else {
-      //   console.log('nuh')
-      // }
-
       return payload
     })
   }

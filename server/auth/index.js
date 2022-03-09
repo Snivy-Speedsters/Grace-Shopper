@@ -14,6 +14,7 @@ router.post('/login', async (req, res, next) => {
 router.post('/signup', async (req, res, next) => {
   try {
     const userData = {email: req.body.email, password: req.body.password, firstName: req.body.firstName, lastName: req.body.lastName}
+    console.log(userData)
     const user = await User.create(userData)
     res.send({token: await user.generateToken()})
   } catch (err) {
@@ -27,7 +28,6 @@ router.post('/signup', async (req, res, next) => {
 
 router.get('/me', async (req, res, next) => {
   try {
-    console.log('before error')
     res.send(await User.findByToken(req.headers.authorization))
   } catch (ex) {
     next(ex)

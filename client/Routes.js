@@ -16,7 +16,7 @@ import Profile from './components/User/Profile';
 import { confirmationPage } from './components/Checkout/confirmationPage';
 
 import { fetchCart } from './store/cart';
-import { makePayment } from './components/Checkout/makePayment';
+import MakePayment from './components/Checkout/makePayment';
 
 function Routes() {
 	const auth = useSelector((state) => state.auth);
@@ -28,7 +28,7 @@ function Routes() {
 	}, []);
 
 	return (
-		<div>
+		<main>
 			{!auth.id ? (
 				<Switch>
 					<Route path="/" exact component={Login} />
@@ -45,7 +45,7 @@ function Routes() {
 					<Route path="/products" exact component={AllProducts} />
 					<Route path="/products/:productId" component={SingleProduct} />
 					<Route path="/cart" component={Cart} />
-					<Route path="/payment" component={makePayment} />
+					<Route path="/payment" component={MakePayment} />
 					<Route path="/orderHistory" component={OrderHistory} />
 					<Route path="/profile" component={Profile} />
 					<Route path="/confirmation" component={confirmationPage} />
@@ -74,7 +74,7 @@ function Routes() {
 					<Redirect to="/home" />
 				</Switch>
 			)}
-		</div>
+		</main>
 	);
 }
 
