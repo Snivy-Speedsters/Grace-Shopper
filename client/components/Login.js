@@ -33,6 +33,7 @@ const Login = () => {
 			return
 		} else {
 			dispatch(login(user))
+			.then(() => {history.pushState('/home')})
 		}
   };
 

@@ -96,7 +96,7 @@ const Navbar = () => {
     <AppBar position="relative">
       <Container maxWidth='xl'>
         <Toolbar>
-          <Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
+          <Typography variant="h6" noWrap component="div" sx={{ mr: 2, display: { xs: 'none', md: 'flex' }}} onClick={() => {handleRoute('/home')}}>
             Buy-A-Buddy
           </Typography>
 
@@ -121,7 +121,7 @@ const Navbar = () => {
           </Box>
 
 
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }} onClick={() => {handleRoute('/home')}}>
             Buy-A-Buddy
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
