@@ -13,6 +13,8 @@ export const Admin = () => {
     switch(view){
       case 'users':
         return (<AllUsers />)
+      case 'orders':
+        return (<AllOrders />)
       case 'products':
         return (<AllProducts />)
       case 'orders':

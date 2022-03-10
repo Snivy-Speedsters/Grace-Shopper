@@ -2,6 +2,7 @@ import React from 'react';
 
 import Navbar from './components/Navbar';
 import Routes from './Routes';
+import { CssBaseline } from '@mui/material';
 
 const App = () => {
 	const localStorage = window.localStorage
@@ -11,6 +12,7 @@ const App = () => {
 
 	return (
 		<div>
+			<CssBaseline />
 			<Navbar />
 			<Routes />
 		</div>

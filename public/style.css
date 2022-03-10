@@ -1,4 +1,4 @@
-body {
+/* body {
   font-family: sans-serif;
   background-color: #fff3b0;
 }
@@ -36,7 +36,7 @@ form div {
   width: 500px;
   height: 800px;
   border: 10px;
-  
+
 }
 .product-container {
   flex-wrap: wrap;
@@ -51,4 +51,4 @@ form div {
 }
 .product-text {
   color: black;
-}
+} */

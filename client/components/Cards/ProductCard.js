@@ -1,56 +1,44 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Card, Box, CardContent, Typography, CardActions, Button, CardMedia} from "@material-ui/core";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { addToCart, fetchCart } from "../../store/cart";
-import { fetchSingleProduct } from "../../store/singleProduct"
+import { addTag } from "../../store/filter";
+import { Card, CardMedia, CardContent, Typography, CardActionArea, Box, Chip, IconButton } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import { addToCart, fetchCart } from '../../store/cart'
 
 export const ProductCard = (props) => {
-  const { imageUrl, name, price, id } = props.product;
+  const { imageUrl, name, id, tags } = props.product;
+
+  const price = props.product.price.substring(0, props.product.price.length - 3)
 
   const dispatch = useDispatch();
   const history = useHistory();
 
   const handleAdd = () => {
     dispatch(addToCart(id))
-    .then(() => {dispatch(fetchCart());})
-    .then(() => {history.push("/products");});
-  };
+    .then(() => {dispatch(fetchCart())})
+  }
 
   return (
-    <div>
-      <Box boxShadow={3} spacing={3} style={{ padding: 10 }}>
-        <Card
-          className="mdc-card mdc-card--outlined product"
-          variant="outlined"
-          style={{ backgroundColor: "grey" }}
-        >
-          <CardMedia
-            style={{ paddingTop: "5%" }}
-            image={imageUrl}
-            title="Background image"
-            component="img"
-          />
-
-          <CardContent>
-            <Link to={`/products/${id}`}>
-              <Typography variant="h3" className="product-text">
-                {name}
-              </Typography>
-              <Typography variant="h3" className="price-text">
-                $ {price}
-              </Typography>
-            </Link>
-            <CardActions>
-              <Button onClick={handleAdd} className="button">
-                Add to Cart
-              </Button>
-            </CardActions>
-          </CardContent>
-        </Card>
-      </Box>
-    </div>
+    <Card variant="outlined" sx={{maxWidth: 300}}>
+      <CardActionArea onClick={() => {history.push(`/products/${id}`)}}>
+        <CardMedia component='img' height='300' image={imageUrl} alt={name} />
+        <CardContent>
+          <Typography gutterBottom variant='h5' component='div'>{name}</Typography>
+          <Typography gutterBottom variant="body2" color="text.secondary">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Sed eget tempor nulla. Cras tristique molestie aliquet.
+          </Typography>
+          <Typography gutterBottom variant='h5' component='div'>${price}</Typography>
+        </CardContent>
+        </CardActionArea>
+        <IconButton onClick={() => {handleAdd()}}><AddIcon /></IconButton>
+        <Box display='flex'>
+          {tags.length === 0 ? <></> :
+            tags.map(tag => <Chip key={tag.name} label={tag.name} variant="outlined" onClick={() => {dispatch(addTag(tag.name))}} />)
+          }
+        </Box>
+    </Card>
   );
 };
 
