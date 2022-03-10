@@ -5,6 +5,7 @@ import productsReducer from './products'
 import usersReducer from './allUsers'
 import singleProductReducer from './singleProduct'
 import filterReducer from './filter'
+import orderReducer from './orders'
 
 export default configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export default configureStore({
     products: productsReducer,
     users: usersReducer,
     singleProduct: singleProductReducer,
-    filter: filterReducer
+    filter: filterReducer,
+    orders: orderReducer
   },
 })
