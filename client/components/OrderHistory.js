@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 const OrderHistory = () => {
 
   const orders = useSelector((state) => state.orders)
-  const [snivey, setSnivey] = useState(false)
+    const [snivey, setSnivey] = useState(false)
+
+
 
   const dispatch = useDispatch()
 
@@ -49,8 +51,10 @@ const OrderHistory = () => {
       <div className="cart">
         <h5>You have ordered:</h5>
         <ul className="collection">{allOrders}</ul>
+
         <button onClick={() => {setSnivey(!snivey)}}>shh</button>
         {surprise(snivey)}
+
       </div>
     </div>
   );

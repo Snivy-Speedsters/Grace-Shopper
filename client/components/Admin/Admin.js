@@ -17,6 +17,8 @@ export const Admin = () => {
         return (<AllOrders />)
       case 'products':
         return (<AllProducts />)
+      case 'orders':
+        return (<AllOrders />)
       default:
         return (<></>)
     }
