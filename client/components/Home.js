@@ -7,13 +7,10 @@ export const Home = () => {
 	return (
 		<div>
 			<h3>Welcome, {firstName}</h3>
-			<p>
-				At Rent-a-Buddy™ we take the capitalistic approach to having friends.
-				Have your buddy spend time with you for as little as one day or up to a
-				week! Your buddy can accompany you to a wedding, vacation to the
-				Bahamas, or just a walk in the park. As one customer notes, “I have real
-				friends, this is just more convenient.”
-			</p>
+			<p>At Plain Grey T's, we sell T-shirts.</p>
+			<p> All Grey.</p>
+			<p> All Plain.</p>
+			<p> Subtly Different.</p>
 		</div>
 	);
 };

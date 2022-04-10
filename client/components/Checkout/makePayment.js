@@ -52,9 +52,9 @@ export const MakePayment = () => {
 			name="Rent Buddy"
 			amount={totalAmount * 100}
 		>
-			<Button variant="contained">Rent Buddy for ${totalAmount}</Button>
+			<Button variant="contained">Total: ${totalAmount}</Button>
 		</StripeCheckout>
 	);
 };
 
-export default MakePayment
+export default MakePayment;
