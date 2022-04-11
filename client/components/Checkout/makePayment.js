@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import StripeCheckout from 'react-stripe-checkout';
@@ -14,6 +14,7 @@ export const MakePayment = () => {
 	if (cart.length) {
 		totalAmount = cart
 			.map((product) => {
+				console.log(product.cart.qty);
 				return parseInt(product.price * product.cart.qty);
 			})
 			.reduce((prev, cur) => (prev += cur));
@@ -49,12 +50,12 @@ export const MakePayment = () => {
 		<StripeCheckout
 			stripeKey="pk_test_51KajEaGJWhSw6KvjEOgLGKYpDIIfQ5j9BmjwsaKbbP81UCn9v9mRZ8YktsK7QeMmYIpqhEtSULNpP8DC28lg4a1e008qZTaRr1"
 			token={paymentToken}
-			name="Rent Buddy"
+			name="Buy T-Shirt"
 			amount={totalAmount * 100}
 		>
-			<Button variant="contained">Rent Buddy for ${totalAmount}</Button>
+			<Button variant="contained">Total: ${totalAmount}</Button>
 		</StripeCheckout>
 	);
 };
 
-export default MakePayment
+export default MakePayment;

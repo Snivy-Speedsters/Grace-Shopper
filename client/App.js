@@ -4,11 +4,15 @@ import Navbar from './components/Navbar';
 import Routes from './Routes';
 import { CssBaseline } from '@mui/material';
 
-const App = () => {
-	const localStorage = window.localStorage
+import './index.css';
 
-	localStorage.products = (localStorage.products ? localStorage.products : JSON.stringify([]))
-	localStorage.amount = (localStorage.amount ? localStorage.amount : '0')
+const App = () => {
+	const localStorage = window.localStorage;
+
+	localStorage.products = localStorage.products
+		? localStorage.products
+		: JSON.stringify([]);
+	localStorage.amount = localStorage.amount ? localStorage.amount : '0';
 
 	return (
 		<div>
