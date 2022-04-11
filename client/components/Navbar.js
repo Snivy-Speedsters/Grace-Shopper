@@ -125,20 +125,26 @@ const Navbar = () => {
 	};
 
 	return (
-		<AppBar position="relative">
+		<AppBar style={{ backgroundColor: '#787677' }} position="relative">
 			<Container maxWidth="xl">
 				<Toolbar>
-					<Typography
-						variant="h6"
-						noWrap
-						component="div"
-						sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-						onClick={() => {
-							handleRoute('/home');
-						}}
-					>
-						Plain Grey T's
-					</Typography>
+					<Button>
+						<Typography
+							variant="h6"
+							noWrap
+							component="div"
+							sx={{
+								color: 'white',
+								mr: 2,
+								display: { xs: 'none', md: 'flex' },
+							}}
+							onClick={() => {
+								handleRoute('/home');
+							}}
+						>
+							Plain Grey T's
+						</Typography>
+					</Button>
 
 					<Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
@@ -161,6 +167,7 @@ const Navbar = () => {
 							{pages(isLoggedIn, isAdmin).map((page) => (
 								<MenuItem key={page.name}>
 									<Typography
+										sx={{ color: 'black' }}
 										textAlign="center"
 										onClick={() => {
 											handleRoute(page.path);
@@ -177,7 +184,11 @@ const Navbar = () => {
 						variant="h6"
 						noWrap
 						component="div"
-						sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+						sx={{
+							color: 'white',
+							flexGrow: 1,
+							display: { xs: 'flex', md: 'none' },
+						}}
 						onClick={() => {
 							handleRoute('/home');
 						}}

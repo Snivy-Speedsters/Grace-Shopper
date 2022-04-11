@@ -49,7 +49,7 @@ export const MakePayment = () => {
 		<StripeCheckout
 			stripeKey="pk_test_51KajEaGJWhSw6KvjEOgLGKYpDIIfQ5j9BmjwsaKbbP81UCn9v9mRZ8YktsK7QeMmYIpqhEtSULNpP8DC28lg4a1e008qZTaRr1"
 			token={paymentToken}
-			name="Rent Buddy"
+			name="Buy T-Shirt"
 			amount={totalAmount * 100}
 		>
 			<Button variant="contained">Total: ${totalAmount}</Button>
