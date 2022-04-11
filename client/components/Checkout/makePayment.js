@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import StripeCheckout from 'react-stripe-checkout';
@@ -14,6 +14,7 @@ export const MakePayment = () => {
 	if (cart.length) {
 		totalAmount = cart
 			.map((product) => {
+				console.log(product.cart.qty);
 				return parseInt(product.price * product.cart.qty);
 			})
 			.reduce((prev, cur) => (prev += cur));

@@ -1,18 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-	AppBar,
-	Typography,
-	Container,
-	Toolbar,
-	Box,
-	IconButton,
-	Menu,
-	MenuItem,
-	Button,
-	Tooltip,
-	Avatar,
-} from '@mui/material';
+import { Typography, Box, Button } from '@mui/material';
 import AllProducts from './AllProducts';
 import { useHistory } from 'react-router-dom';
 
