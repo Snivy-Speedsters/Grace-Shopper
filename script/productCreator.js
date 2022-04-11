@@ -9,7 +9,7 @@ function createProduct(index) {
 	// );
 	const adj = faker.commerce.productAdjective();
 	const name = `${adj} T-Shirt`;
-	const description = faker.lorem.paragraph();
+	const description = 'Grey';
 	const price = faker.commerce.price(25, 100);
 	const imageUrl = `/images/tshirt/greytshirt.jpg`;
 
